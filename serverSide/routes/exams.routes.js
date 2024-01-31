@@ -7,3 +7,5 @@ router.get("/getExam/:id", );
 router.post("/addNewExam",);
 router.put("/updateExamDetails/:id",)
 router.delete("/deleteExam/:id" , );
+
+export default router;

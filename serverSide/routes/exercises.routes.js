@@ -8,3 +8,5 @@ router.get("/getExercise/:id", );
 router.post("/addNewExercise",);
 router.put("/updateExercise/:id",)
 router.delete("/deleteExercise/:id" , );
+
+export default router;
