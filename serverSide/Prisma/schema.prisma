@@ -1,0 +1,62 @@
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("PRI_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum StudentStatus {
+  ACTIVE
+  INACTIVE
+  NEW
+}
+model student {
+  id       String         @id @default(uuid())
+  name     String
+  phone    String      
+  email    String         @unique 
+  progress String
+}
+
+
+
+
+// Define the Lesson model
+model Lesson {
+  id          String      @id @default(uuid())
+  subject     String   
+  description String
+  code        String
+}
+
+// Define the ExamToExercise model for the many-to-many relationship
+model ExamToExercise {
+  examId    String
+  exerciseId String
+  exam      Exam @relation(fields: [examId], references: [id])
+  exercise  Exercise @relation(fields: [exerciseId], references: [id])
+
+  @@id([examId, exerciseId])
+}
+
+model Exam {
+  id           String   @id @default(uuid())
+  description  String  
+  grade        Float   
+  exercises    ExamToExercise[]
+}
+
+model Exercise {
+  id          String   @id @default(uuid())
+  description String  
+  code        String?  // Add a default value if applicable
+  grade       Float  
+  examResults ExamToExercise[]
+}
+
+
