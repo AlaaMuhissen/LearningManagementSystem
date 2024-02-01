@@ -35,7 +35,7 @@ export const getStudentById = async (req, res) => {
 /**Creates a new student */
 export const createNewStudent = async (req, res) => {
     const studentData = req.body;
-  
+    // console.log(studentData)
     try {
       const newStudent = await prisma.student.create({
         data: {
@@ -43,7 +43,7 @@ export const createNewStudent = async (req, res) => {
           phone: studentData.phone,
           email: studentData.email,
           progress: studentData.progress,
-        //   status: {create: {status : studentData.status || 'ACTIVE'}},
+          // status: studentData.status || 'ACTIVE',
         },
       });
   

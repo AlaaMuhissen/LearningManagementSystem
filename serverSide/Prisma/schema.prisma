@@ -21,6 +21,7 @@ model student {
   phone    String      
   email    String         @unique 
   progress String
+
 }
 
 
