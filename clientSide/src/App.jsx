@@ -1,33 +1,33 @@
-import { useState } from 'react'
+import { useState ,useEffect } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
+
+import FetchStudentTable from './Components/CreateTable/FetchStudentTable'
+import AddNewStudentForm from './Components/AddForm/AddNewStudentForm'
 
 function App() {
   const [count, setCount] = useState(0)
 
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <BrowserRouter>
+        <Routes>
+          {/* <Route path='/' element={<LoginPage />} />
+          <Route path='/signUp' element={<RegistrationPage />} /> */}
+      
+            <Route path='/dashboard' element={<FetchStudentTable />} />
+            <Route path='/addStudent' element={<AddNewStudentForm />} />
+            {/* <Route path='/dashboard/:language_Topics/:topic/levels' element={<LevelsPage />} />
+            <Route path='/dashboard/:language_Topics/:topic/levels/:levelNum/challenges' element={<ChallengePage />} />
+            <Route path='/dashboard/:language_Topics/:topic/levels/:levelNum/challenges/:challengeNum' element={<HTMLPage />} /> */}
+         
+        </Routes>
+    </BrowserRouter>
+ 
+
+      
     </>
   )
 }
