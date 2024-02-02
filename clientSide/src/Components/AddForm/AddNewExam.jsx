@@ -21,7 +21,7 @@ function AddNewExamForm() {
 
   const fetchAvailableExercises = async () => {
     try {
-      const response = await fetch('http://localhost:3001/api/exercises/getAllExercises');
+      const response = await fetch('https://learningmanagementsystem.onrender.com/api/exercises/getAllExercises');
       if (response.ok) {
         const data = await response.json();
         setAvailableExercises(data);
@@ -42,7 +42,7 @@ function AddNewExamForm() {
       exerciseids: selectedExercises,
     };
 
-    fetch('http://localhost:3001/api/exams/addNewExam', {
+    fetch('https://learningmanagementsystem.onrender.com/api/exams/addNewExam', {
       method: 'POST',
       body: JSON.stringify(newExam),
       headers: {

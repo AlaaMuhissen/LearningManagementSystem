@@ -17,7 +17,7 @@ function EditStudentInfo({ row, onClose }) {
   const [status, setStatus] = useState(row.status);
 
   const handleSave = () => {
-    fetch(`http://localhost:3001/api/students/updateStudentDetails/${row.id}`, {
+    fetch(`https://learningmanagementsystem.onrender.com/api/students/updateStudentDetails/${row.id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',

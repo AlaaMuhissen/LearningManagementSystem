@@ -37,7 +37,7 @@ function FetchExamTable() {
     try {
       const freshToken = await refreshIdToken();
       console.log(freshToken);
-      const response = await fetch('http://localhost:3001/api/exams/getAllExams', {
+      const response = await fetch('https://learningmanagementsystem.onrender.com/api/exams/getAllExams', {
         headers: {
           Authorization: `Bearer ${freshToken}`,
           'Content-Type': 'application/json',
@@ -49,7 +49,7 @@ function FetchExamTable() {
         setRow(data);
       } else if (response.status === 401) {
         const retryFreshToken = await refreshIdToken();
-        const retryResponse = await fetch('http://localhost:3001/api/exams/getAllExams', {
+        const retryResponse = await fetch('https://learningmanagementsystem.onrender.com/api/exams/getAllExams', {
           headers: {
             Authorization: `Bearer ${retryFreshToken}`,
             'Content-Type': 'application/json',
@@ -79,7 +79,7 @@ function FetchExamTable() {
   const handleDeleteClick = async (row) => {
     try {
       const freshToken = await refreshIdToken();
-      const response = await fetch(`http://localhost:3001/api/exams/deleteExam/${row.id}`, {
+      const response = await fetch(`https://learningmanagementsystem.onrender.com/api/exams/deleteExam/${row.id}`, {
         method: 'DELETE',
         headers: {
           Authorization: `Bearer ${freshToken}`,

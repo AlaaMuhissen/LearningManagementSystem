@@ -34,7 +34,7 @@ function FetchStudentTable() {
     setLoading(true); // Set loading to true when starting to fetch data
     try {
       const freshToken = await refreshIdToken();
-      const response = await fetch('http://localhost:3001/api/students/getAllStudents', {
+      const response = await fetch('https://learningmanagementsystem.onrender.com/api/students/getAllStudents', {
         headers: {
           Authorization: `Bearer ${freshToken}`,
           'Content-Type': 'application/json',
@@ -47,7 +47,7 @@ function FetchStudentTable() {
       } else if (response.status === 401) {
         // Unauthorized, refresh token and retry the request
         const retryFreshToken = await refreshIdToken();
-        const retryResponse = await fetch('http://localhost:3001/api/students/getAllStudents', {
+        const retryResponse = await fetch('https://learningmanagementsystem.onrender.com/api/students/getAllStudents', {
           headers: {
             Authorization: `Bearer ${retryFreshToken}`,
             'Content-Type': 'application/json',
@@ -77,7 +77,7 @@ function FetchStudentTable() {
   const handleDeleteClick = async (row) => {
     try {
       const freshToken = await refreshIdToken();
-      const response = await fetch(`http://localhost:3001/api/students/deleteStudent/${row.id}`, {
+      const response = await fetch(`https://learningmanagementsystem.onrender.com/api/students/deleteStudent/${row.id}`, {
         method: 'DELETE',
         headers: {
           Authorization: `Bearer ${freshToken}`,
