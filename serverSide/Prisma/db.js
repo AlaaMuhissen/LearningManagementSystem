@@ -7,5 +7,5 @@ dotenv.config();
 const prisma = new PrismaClient();
 
 withAccelerate(prisma);
-prisma.$disconnect();
+
 export { prisma };

@@ -3,16 +3,26 @@ import CreateTable from './CreateTable';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import EditStudentInfo from '../EditForm/EditStudentInfo';
+<<<<<<< HEAD
 import { useAuth } from '../Login/AuthContext';
 import { getAuth, onIdTokenChanged } from 'firebase/auth';
 
 function FetchStudentTable() {
   const auth = getAuth();
   const { authToken, updateUser } = useAuth();
+=======
+
+function createData(dataObject) {
+  return { ...dataObject };
+}
+
+function FetchStudentTable() {
+>>>>>>> b76a9390194a2682543b8202603d54b7f576cccb
   const [rows, setRow] = useState([]);
   const [columns, setColumns] = useState([]);
   const [editRow, setEditRow] = useState(null);
 
+<<<<<<< HEAD
   // Function to refresh the user's ID token
   const refreshIdToken = async () => {
     try {
@@ -65,12 +75,26 @@ function FetchStudentTable() {
     }
   };
   
+=======
+  useEffect(() => {
+    fetch('http://localhost:3001/api/students/getAllStudents')
+      .then(res => res.json())
+      .then(data => {
+        setRow(data);
+      })
+      .catch(error => {
+        console.error('Error during fetching student:', error);
+      });
+  }, []);
+
+>>>>>>> b76a9390194a2682543b8202603d54b7f576cccb
   const handleEditClick = (row) => {
     setEditRow(row);
   };
 
   const handleDeleteClick = async (row) => {
     try {
+<<<<<<< HEAD
       const freshToken = await refreshIdToken();
       const response = await fetch(`http://localhost:3001/api/students/deleteStudent/${row.id}`, {
         method: 'DELETE',
@@ -78,6 +102,10 @@ function FetchStudentTable() {
           Authorization: `Bearer ${freshToken}`,
           'Content-Type': 'application/json',
         },
+=======
+      const response = await fetch(`http://localhost:3001/api/students/deleteStudent/${row.id}`, {
+        method: 'DELETE'
+>>>>>>> b76a9390194a2682543b8202603d54b7f576cccb
       });
 
       if (response.ok) {
@@ -93,10 +121,13 @@ function FetchStudentTable() {
   };
 
   useEffect(() => {
+<<<<<<< HEAD
     fetchData();
   }, [authToken]);
 
   useEffect(() => {
+=======
+>>>>>>> b76a9390194a2682543b8202603d54b7f576cccb
     if (rows.length > 0) {
       const columnNames = Object.keys(rows[0]);
       const newColumns = columnNames.map(columnName => ({
