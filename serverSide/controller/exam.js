@@ -37,11 +37,11 @@ export const createNewExam = async (req, res) => {
     const examData = req.body;
     console.log(examData)
     try {
-      const newExam = await prisma.examData.create({
+      const newExam = await prisma.exam.create({
         data: {
-          subject: examData.subject,
           description: examData.description,
-          code: examData.code,    
+          grade: examData.grade,
+          exerciseids: examData.exerciseids,    
         },
       });
   

@@ -23,7 +23,7 @@ function EditExamInfo({ row, onClose }) {
 
   const fetchAvailableExercises = async () => {
     try {
-      const response = await fetch('http://localhost:3001/api/exercises/getAllExercises');
+      const response = await fetch('https://learningmanagementsystem.onrender.com/api/exercises/getAllExercises');
       if (response.ok) {
         const data = await response.json();
         setAvailableExercises(data);
@@ -37,7 +37,7 @@ function EditExamInfo({ row, onClose }) {
 
   const handleSave = () => {
     
-    fetch(`http://localhost:3001/api/exams/updateExamDetails/${row.id}`, {
+    fetch(`https://learningmanagementsystem.onrender.com/api/exams/updateExamDetails/${row.id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",

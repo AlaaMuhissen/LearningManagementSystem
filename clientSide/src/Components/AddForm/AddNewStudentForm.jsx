@@ -26,7 +26,7 @@ function AddNewStudentForm() {
       status: status,
     };
 
-    fetch(`http://localhost:3001/api/students/addNewStudent`, {
+    fetch(`https://learningmanagementsystem.onrender.com/api/students/addNewStudent`, {
       method: 'POST',
       body: JSON.stringify(newStudent),
       headers: {

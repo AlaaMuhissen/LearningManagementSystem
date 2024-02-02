@@ -38,7 +38,7 @@ export default function CreateTable({ rows, columns ,handleEditClick , handleDel
 const getExerciseNameById = async (id) =>{
   try {
     const freshToken = await refreshIdToken();
-    const response = await fetch(`http://localhost:3001/api/exercises/getExercise/${id}`, {
+    const response = await fetch(`https://learningmanagementsystem.onrender.com/api/exercises/getExercise/${id}`, {
       method: 'GET',
       headers: {
         Authorization: `Bearer ${freshToken}`,

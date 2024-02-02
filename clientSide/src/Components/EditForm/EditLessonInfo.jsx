@@ -16,7 +16,7 @@ function EditLessonInfo({ row, onClose }) {
 
   const handleSave = () => {
     
-    fetch(`http://localhost:3001/api/lessons/updateLessonDetails/${row.id}`, {
+    fetch(`https://learningmanagementsystem.onrender.com/api/lessons/updateLessonDetails/${row.id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",

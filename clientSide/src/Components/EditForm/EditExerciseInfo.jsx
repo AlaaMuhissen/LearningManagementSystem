@@ -23,7 +23,7 @@ function EditExerciseInfo({ row, onClose }) {
 
   const fetchAvailableLessons = async () => {
     try {
-      const response = await fetch('http://localhost:3001/api/lessons/getAllLessons');
+      const response = await fetch('https://learningmanagementsystem.onrender.com/api/lessons/getAllLessons');
       if (response.ok) {
         const data = await response.json();
         setAvailableLessons(data);
@@ -37,7 +37,7 @@ function EditExerciseInfo({ row, onClose }) {
 
   const handleSave = () => {
     
-    fetch(`http://localhost:3001/api/exercises/updateExercise/${row.id}`, {
+    fetch(`https://learningmanagementsystem.onrender.com/api/exercises/updateExercise/${row.id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",

@@ -22,7 +22,7 @@ function AddNewExerciseForm() {
 
   const fetchAvailableLessons = async () => {
     try {
-      const response = await fetch('http://localhost:3001/api/lessons/getAllLessons');
+      const response = await fetch('https://learningmanagementsystem.onrender.com/api/lessons/getAllLessons');
       if (response.ok) {
         const data = await response.json();
         setAvailableLessons(data);
@@ -44,7 +44,7 @@ function AddNewExerciseForm() {
       lessonid: selectedLesson,
     };
 
-    fetch('http://localhost:3001/api/exercises/addNewExercise', {
+    fetch('https://learningmanagementsystem.onrender.com/api/exercises/addNewExercise', {
       method: 'POST',
       body: JSON.stringify(newExercise),
       headers: {

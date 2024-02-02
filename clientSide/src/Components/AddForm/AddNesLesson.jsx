@@ -21,7 +21,7 @@ function AddNewLessonForm() {
       code: code,
     };
 
-    fetch(`http://localhost:3001/api/lessons/addNewLesson`, {
+    fetch(`https://learningmanagementsystem.onrender.com/api/lessons/addNewLesson`, {
       method: 'POST',
       body: JSON.stringify(newLesson),
       headers: {
