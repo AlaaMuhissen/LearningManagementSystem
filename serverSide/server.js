@@ -5,7 +5,7 @@ import { errorHandler } from './middleware/errorHandler.js';
 import StudentsRoutes from './routes/students.routes.js';
 import ExamsRoutes from './routes/exams.routes.js';
 import ExercisesRoutes from './routes/exercises.routes.js';
-import LessonsRoutes from './routes/Lessons.routes.js';
+import LessonsRoutes from './routes/lessons.routes.js';
 
 
 const app = express();
