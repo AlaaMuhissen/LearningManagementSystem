@@ -1,46 +1,30 @@
 import { useState ,useEffect } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
-
-import FetchStudentTable from './Components/CreateTable/FetchStudentTable'
 import AddNewStudentForm from './Components/AddForm/AddNewStudentForm'
-<<<<<<< HEAD
 import LoginPage from './Pages/LoginPage'
 import { AuthProvider } from './Components/Login/AuthContext'
-=======
->>>>>>> b76a9390194a2682543b8202603d54b7f576cccb
+import AddNewLessonForm from './Components/AddForm/AddNesLesson'
+import AddNewExamForm from './Components/AddForm/AddNewExam'
+import AddNewExerciseForm from './Components/AddForm/AddNewExercise'
+import DashboardPage from './Pages/DashboardPage'
 
 function App() {
-  const [count, setCount] = useState(0)
+  
 
   return (
     <>
       <BrowserRouter>
-<<<<<<< HEAD
       <AuthProvider>
         <Routes>
-          {/* <Route path='/' element={<LoginPage />} />
-          <Route path='/signUp' element={<RegistrationPage />} /> */}
         <Route path='/' element={<LoginPage/>} />
-=======
-        <Routes>
-          {/* <Route path='/' element={<LoginPage />} />
-          <Route path='/signUp' element={<RegistrationPage />} /> */}
-      
->>>>>>> b76a9390194a2682543b8202603d54b7f576cccb
-            <Route path='/dashboard' element={<FetchStudentTable />} />
+            <Route path='/dashboard' element={<DashboardPage />} />
             <Route path='/addStudent' element={<AddNewStudentForm />} />
-            {/* <Route path='/dashboard/:language_Topics/:topic/levels' element={<LevelsPage />} />
-            <Route path='/dashboard/:language_Topics/:topic/levels/:levelNum/challenges' element={<ChallengePage />} />
-            <Route path='/dashboard/:language_Topics/:topic/levels/:levelNum/challenges/:challengeNum' element={<HTMLPage />} /> */}
-         
+            <Route path='/addLesson' element={<AddNewLessonForm />} />
+            <Route path='/addExam' element={<AddNewExamForm />} />
+            <Route path='/addExercise' element={<AddNewExerciseForm />} />   
         </Routes>
-<<<<<<< HEAD
         </AuthProvider>
-=======
->>>>>>> b76a9390194a2682543b8202603d54b7f576cccb
     </BrowserRouter>
  
 

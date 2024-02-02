@@ -21,7 +21,7 @@ export default function LoginWithGmail() {
 
   return (
     <div>
-      <button onClick={signIn}><FaGoogle color='#704F38' size={"25px"} /></button>
+      <button onClick={signIn}><FaGoogle color='#5698f0' size={"25px"} /></button>
     </div>
   );
 }
