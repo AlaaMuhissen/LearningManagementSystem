@@ -1,0 +1,57 @@
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("PRI_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum StudentStatus {
+  ACTIVE
+  INACTIVE
+  NEW
+}
+model student {
+  id       String         @id @default(uuid())
+  name     String
+  phone    String      
+  email    String         @unique 
+  progress String
+
+}
+
+
+
+
+// Lesson model
+model lesson {
+  id          String      @id @default(uuid())
+  subject     String
+  description String
+  code        String
+}
+
+// Exercises model
+model exercises {
+  id          String      @id @default(uuid())
+  description String
+  code        String
+  grade       Float
+  lessonid    String      
+}
+
+
+
+// Exam model
+model exam {
+  id          String      @id @default(uuid())
+  description String
+  grade       Float
+  exerciseids String[]
+}
+
+
