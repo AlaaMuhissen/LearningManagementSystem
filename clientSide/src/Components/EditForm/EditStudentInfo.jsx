@@ -4,11 +4,12 @@ import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import TextField from '@mui/material/TextField';
 import IconButton from '@mui/material/IconButton';
+import Button from '@mui/material/Button';
 import CloseIcon from '@mui/icons-material/Close';
 import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function EditStudentInfo({ row, onClose }) {
-  
   const [name, setName] = useState(row.name);
   const [email, setEmail] = useState(row.email);
   const [phone, setPhone] = useState(row.phone);
@@ -16,11 +17,10 @@ function EditStudentInfo({ row, onClose }) {
   const [status, setStatus] = useState(row.status);
 
   const handleSave = () => {
-    
     fetch(`http://localhost:3001/api/students/updateStudentDetails/${row.id}`, {
-      method: "PUT",
+      method: 'PUT',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         name: name,
@@ -38,76 +38,76 @@ function EditStudentInfo({ row, onClose }) {
         }
       })
       .then((data) => {
-        console.log("Student updated successfully:", data);  
+        console.log('Student updated successfully:', data);
       })
       .catch((error) => {
-        console.error("Error during update request:", error);
+        console.error('Error during update request:', error);
       });
-      toast("Student updated successfully");
-      window.location.reload();
+    toast.success('Student updated successfully');
+    window.location.reload();
     onClose();
   };
-  
 
   return (
     <>
-  
-    <Dialog open onClose={onClose} maxWidth="sm" fullWidth>
-    <ToastContainer />
-      <DialogTitle>
-        Edit Student Information
-        <IconButton
-          edge="end"
-          color="inherit"
-          onClick={onClose}
-          aria-label="close"
-        >
-          <CloseIcon />
-        </IconButton>
-      </DialogTitle>
-      <DialogContent>
-        <form>
-          <TextField
-            label="Name"
-            fullWidth
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            placeholder={row.name}
-          />
-          <TextField
-            label="Email"
-            fullWidth
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder={row.email}
-          />
-          <TextField
-            label="Phone"
-            fullWidth
-            value={phone}
-            onChange={(e) => setPhone(e.target.value)}
-            placeholder={row.phone}
-          />
-          <TextField
-            label="Progress"
-            fullWidth
-            value={progress}
-            onChange={(e) => setProgress(e.target.value)}
-            placeholder={row.progress}
-          />
-          <TextField
-            label="Status"
-            fullWidth
-            value={status}
-            onChange={(e) => setStatus(e.target.value)}
-            placeholder={row.status}
-          />
-          <button type="button" onClick={handleSave}>
-            Save
-          </button>
-        </form>
-      </DialogContent>
-    </Dialog>
+      <Dialog open onClose={onClose} maxWidth="sm" fullWidth>
+        <ToastContainer />
+        <DialogTitle sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
+          Edit Student Information
+          <IconButton edge="end" color="inherit" onClick={onClose} aria-label="close">
+            <CloseIcon />
+          </IconButton>
+        </DialogTitle>
+
+        <DialogContent>
+          <form>
+            <TextField
+              label="Name"
+              fullWidth
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder={row.name}
+              margin="normal"
+            />
+            <TextField
+              label="Email"
+              fullWidth
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder={row.email}
+              margin="normal"
+            />
+            <TextField
+              label="Phone"
+              fullWidth
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+              placeholder={row.phone}
+              margin="normal"
+            />
+            <TextField
+              label="Progress"
+              fullWidth
+              value={progress}
+              onChange={(e) => setProgress(e.target.value)}
+              placeholder={row.progress}
+              margin="normal"
+            />
+            <TextField
+              label="Status"
+              fullWidth
+              value={status}
+              onChange={(e) => setStatus(e.target.value)}
+              placeholder={row.status}
+              margin="normal"
+            />
+          <Button variant="contained" color="primary" onClick={handleSave} sx={{ margin: '20px auto', display: 'block' }}>
+  Save
+</Button>
+
+          </form>
+        </DialogContent>
+      </Dialog>
     </>
   );
 }

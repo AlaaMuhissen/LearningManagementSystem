@@ -3,32 +3,25 @@ import CreateTable from './CreateTable';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import EditStudentInfo from '../EditForm/EditStudentInfo';
-<<<<<<< HEAD
 import { useAuth } from '../Login/AuthContext';
 import { getAuth, onIdTokenChanged } from 'firebase/auth';
+import { Button, CircularProgress, Box } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
 function FetchStudentTable() {
   const auth = getAuth();
   const { authToken, updateUser } = useAuth();
-=======
-
-function createData(dataObject) {
-  return { ...dataObject };
-}
-
-function FetchStudentTable() {
->>>>>>> b76a9390194a2682543b8202603d54b7f576cccb
   const [rows, setRow] = useState([]);
   const [columns, setColumns] = useState([]);
   const [editRow, setEditRow] = useState(null);
+  const [loading, setLoading] = useState(true); // New state for loading
+  const navigate = useNavigate();
 
-<<<<<<< HEAD
-  // Function to refresh the user's ID token
   const refreshIdToken = async () => {
     try {
       const user = auth.currentUser;
       if (user) {
-        const freshToken = await user.getIdToken(/* forceRefresh */ true);
+        const freshToken = await user.getIdToken(true);
         updateUser({ ...authToken, token: freshToken });
         return freshToken;
       }
@@ -38,16 +31,16 @@ function FetchStudentTable() {
   };
 
   const fetchData = async () => {
+    setLoading(true); // Set loading to true when starting to fetch data
     try {
       const freshToken = await refreshIdToken();
-      console.log(freshToken);
       const response = await fetch('http://localhost:3001/api/students/getAllStudents', {
         headers: {
           Authorization: `Bearer ${freshToken}`,
           'Content-Type': 'application/json',
         },
       });
-  
+
       if (response.ok) {
         const data = await response.json();
         setRow(data);
@@ -60,7 +53,7 @@ function FetchStudentTable() {
             'Content-Type': 'application/json',
           },
         });
-  
+
         if (retryResponse.ok) {
           const retryData = await retryResponse.json();
           setRow(retryData);
@@ -72,29 +65,17 @@ function FetchStudentTable() {
       }
     } catch (error) {
       console.error('API request error:', error);
+    } finally {
+      setLoading(false); // Set loading to false when fetching is completed (success or failure)
     }
   };
-  
-=======
-  useEffect(() => {
-    fetch('http://localhost:3001/api/students/getAllStudents')
-      .then(res => res.json())
-      .then(data => {
-        setRow(data);
-      })
-      .catch(error => {
-        console.error('Error during fetching student:', error);
-      });
-  }, []);
 
->>>>>>> b76a9390194a2682543b8202603d54b7f576cccb
   const handleEditClick = (row) => {
     setEditRow(row);
   };
 
   const handleDeleteClick = async (row) => {
     try {
-<<<<<<< HEAD
       const freshToken = await refreshIdToken();
       const response = await fetch(`http://localhost:3001/api/students/deleteStudent/${row.id}`, {
         method: 'DELETE',
@@ -102,10 +83,6 @@ function FetchStudentTable() {
           Authorization: `Bearer ${freshToken}`,
           'Content-Type': 'application/json',
         },
-=======
-      const response = await fetch(`http://localhost:3001/api/students/deleteStudent/${row.id}`, {
-        method: 'DELETE'
->>>>>>> b76a9390194a2682543b8202603d54b7f576cccb
       });
 
       if (response.ok) {
@@ -121,19 +98,16 @@ function FetchStudentTable() {
   };
 
   useEffect(() => {
-<<<<<<< HEAD
     fetchData();
   }, [authToken]);
 
   useEffect(() => {
-=======
->>>>>>> b76a9390194a2682543b8202603d54b7f576cccb
     if (rows.length > 0) {
       const columnNames = Object.keys(rows[0]);
-      const newColumns = columnNames.map(columnName => ({
+      const newColumns = columnNames.map((columnName) => ({
         id: columnName,
         label: columnName,
-        minWidth: 170
+        minWidth: 70,
       }));
 
       setColumns(newColumns);
@@ -142,12 +116,23 @@ function FetchStudentTable() {
 
   return (
     <>
-      {rows.length !== 0 && columns.length !== 0 && (
+      {loading && <CircularProgress sx={{ margin: '20px auto', display: 'block' }} />}
+      {!loading && rows.length !== 0 && columns.length !== 0 && (
         <>
           <CreateTable rows={rows} columns={columns} handleEditClick={handleEditClick} handleDeleteClick={handleDeleteClick} />
           {editRow && <EditStudentInfo row={editRow} onClose={() => setEditRow(null)} />}
         </>
       )}
+      <Button
+        variant="contained"
+        color="primary"
+        onClick={() => {
+          navigate('/addStudent');
+        }}
+        sx={{ margin: '20px auto', display: 'block' }}
+      >
+        Add New Student
+      </Button>
       <ToastContainer />
     </>
   );

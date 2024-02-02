@@ -1,12 +1,12 @@
 import React from 'react'
-
 import LoginWithEmail from '../Components/Login/LoginWithEmail'
+import bgImg  from '../../public/Animated_Shape.svg'
 export default function LoginPage() {
 
   return (
   <>
     <div
-    className='w-ful bg-cover bg-center h-screen flex justify-center items-center' 
+    className='w-ful bg-cover bg-center h-screen flex justify-center items-center' style={{ backgroundImage: `url('${bgImg}')` }}
     >
     <div  className='h-screen flex justify-center align-middle
     items-center'>

@@ -30,7 +30,7 @@ export default function LoginWithEmail() {
 
   return (
     <>
-      <form className='isolate aspect-video rounded-xl bg-white/20 shadow-lg ring-1 ring-black/5 h-90 w-30 flex flex-col gap-4 items-center p-11'>
+      <form className='isolate aspect-video rounded-xl bg-white/60 shadow-lg ring-1 ring-black/10 h-90 w-30 flex flex-col gap-4 items-center p-11'>
         <div className='relative'>
           <input
             type="url"
@@ -50,13 +50,13 @@ export default function LoginWithEmail() {
           />
         </div>
         <button
-          className="bg-[#704F38] text-white font-bold p-2 rounded-md w-24"
+          className="bg-[#5698f0] text-[#0d1d32] font-bold p-2 rounded-md w-24"
           onClick={signIn}
         >
           Login
         </button>
 
-        <p className="text-sm font-bold">
+        <p className="text-sm font-bold text-[#0d1d32]">
           Don't have an account? <a href="#">Sign up</a>
         </p>
         <div className="flex justify-between items-center">
