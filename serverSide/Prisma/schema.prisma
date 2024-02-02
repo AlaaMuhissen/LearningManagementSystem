@@ -27,37 +27,31 @@ model student {
 
 
 
-// Define the Lesson model
-model Lesson {
+// Lesson model
+model lesson {
   id          String      @id @default(uuid())
-  subject     String   
+  subject     String
   description String
   code        String
 }
 
-// Define the ExamToExercise model for the many-to-many relationship
-model ExamToExercise {
-  examId    String
-  exerciseId String
-  exam      Exam @relation(fields: [examId], references: [id])
-  exercise  Exercise @relation(fields: [exerciseId], references: [id])
-
-  @@id([examId, exerciseId])
+// Exercises model
+model exercises {
+  id          String      @id @default(uuid())
+  description String
+  code        String
+  grade       Float
+  lessonid    String      
 }
 
-model Exam {
-  id           String   @id @default(uuid())
-  description  String  
-  grade        Float   
-  exercises    ExamToExercise[]
-}
 
-model Exercise {
-  id          String   @id @default(uuid())
-  description String  
-  code        String?  // Add a default value if applicable
-  grade       Float  
-  examResults ExamToExercise[]
+
+// Exam model
+model exam {
+  id          String      @id @default(uuid())
+  description String
+  grade       Float
+  exerciseids String[]
 }
 
 
