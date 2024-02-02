@@ -11,12 +11,6 @@
   },
   "dependencies": {
 <<<<<<< HEAD
-    "firebase": "^10.7.2",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-router-dom": "^6.21.3",
-    "react-toastify": "^10.0.4",
-=======
     "autoprefixer": "^10.4.17",
     "firebase": "^10.7.2",
     "postcss": "^8.4.33",
@@ -26,7 +20,13 @@
     "react-router-dom": "^6.21.3",
     "react-toastify": "^10.0.4",
     "styled-components": "^6.1.8",
->>>>>>> 9d4263d0 (fix: Resolve merge conflicts)
+=======
+    "firebase": "^10.7.2",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.21.3",
+    "react-toastify": "^10.0.4",
+>>>>>>> b76a9390194a2682543b8202603d54b7f576cccb
     "tostify": "^0.0.1"
   },
   "devDependencies": {
@@ -38,9 +38,6 @@
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.5",
 <<<<<<< HEAD
-    "vite": "^5.0.8"
-  }
-=======
     "tailwindcss": "^3.4.1",
     "vite": "^5.0.8"
   },
@@ -49,5 +46,8 @@
   "keywords": [],
   "author": "",
   "license": "ISC"
->>>>>>> 9d4263d0 (fix: Resolve merge conflicts)
+=======
+    "vite": "^5.0.8"
+  }
+>>>>>>> b76a9390194a2682543b8202603d54b7f576cccb
 }
