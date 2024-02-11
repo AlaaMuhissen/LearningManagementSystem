@@ -11,20 +11,25 @@ admin.initializeApp({
     credential: admin.credential.cert(serviceAccountContent)
   });
 
-export const verifyToken = async (req, res, next) => {
+export const verifyToken =  (req, res, next) => {
     let idToken;
   const authHeader = req.headers.Authorization || req.headers.authorization;
   if(authHeader){
     idToken =authHeader.split(" ")[1];
     console.log(`token is : ${idToken}`);
     try {
-       const decodedToken = await admin.auth().verifyIdToken(idToken);
-       if(decodedToken){
-         req.user = decodedToken;
-          return next();
-       }else{
-           res.status(401).json({message: 'Unauthorized'})
-       }
+      admin.auth().verifyIdToken(idToken)
+    .then(decodedToken => {
+      req.user = decodedToken;
+      next();
+    })
+      //  const decodedToken = await admin.auth().verifyIdToken(idToken);
+      //  if(decodedToken){
+      //    req.user = decodedToken;
+      //     return next();
+      //  }else{
+      //      res.status(401).json({message: 'Unauthorized'})
+      //  }
     } catch (error) {
       console.error('Firebase Auth Error:', error);
     }

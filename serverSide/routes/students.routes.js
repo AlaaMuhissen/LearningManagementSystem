@@ -1,13 +1,13 @@
 import { Router } from "express";
-import {getStudentById, queryStudentTable , createNewStudent, updateStudentDetails, deleteStudent} from '../controller/user.js'
+import { queryStudentTable , getStudentByEmail ,createNewStudent ,deleteStudent ,updateStudent} from '../controller/student.js'
 import { verifyToken } from "../middleware/isAuth.js";
 const router = Router();
+//getStudentById, createNewStudent, updateStudentDetails, deleteStudent
 
-
-router.get("/getAllStudents" ,verifyToken, queryStudentTable);
-router.get("/getStudent/:id",getStudentById );
+router.get("/getAllStudents" , queryStudentTable);
+router.get("/getStudent/:email",getStudentByEmail);
 router.post("/addNewStudent", createNewStudent);
-router.put("/updateStudentDetails/:id", updateStudentDetails)
-router.delete("/deleteStudent/:id" , deleteStudent);
+router.put("/updateStudentDetails/:user_id", updateStudent)
+router.delete("/deleteStudent/:email" , deleteStudent);
 
 export default router;
