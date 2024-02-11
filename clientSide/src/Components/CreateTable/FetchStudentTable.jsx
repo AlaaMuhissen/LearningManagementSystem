@@ -10,7 +10,7 @@ import { useNavigate } from 'react-router-dom';
 
 function FetchStudentTable() {
   const auth = getAuth();
-  const { authToken, updateUser } = useAuth();
+  const { authToken, updateUser ,userData  } = useAuth();
   const [rows, setRow] = useState([]);
   const [columns, setColumns] = useState([]);
   const [editRow, setEditRow] = useState(null);
@@ -20,6 +20,7 @@ function FetchStudentTable() {
   const refreshIdToken = async () => {
     try {
       const user = auth.currentUser;
+      console.log(userData);
       if (user) {
         const freshToken = await user.getIdToken(true);
         updateUser({ ...authToken, token: freshToken });

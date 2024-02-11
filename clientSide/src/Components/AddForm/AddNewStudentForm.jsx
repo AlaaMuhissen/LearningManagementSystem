@@ -8,22 +8,25 @@ import Box from '@mui/material/Box';
 import { useNavigate } from 'react-router-dom';
 
 function AddNewStudentForm() {
-  const [name, setName] = useState('');
+  const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [phone, setPhone] = useState('');
   const [progress, setProgress] = useState('');
-  const [status, setStatus] = useState('');
+  const [address, setAddress] = useState('');
   const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
     const newStudent = {
-      name: name,
+      username: username,
       email: email,
+      password : password,
       phone: phone,
+      address: address,
       progress: progress,
-      status: status,
+      role: 'student'
     };
 
     fetch(`https://learningmanagementsystem.onrender.com/api/students/addNewStudent`, {
@@ -40,9 +43,11 @@ function AddNewStudentForm() {
     // Clear the form fields after submission
     setName('');
     setEmail('');
+    setPassword('')
     setPhone('');
+    setAddress('');
     setProgress('');
-    setStatus('');
+ 
   };
 
   return (
@@ -64,19 +69,28 @@ function AddNewStudentForm() {
         </Typography>
         <Divider sx={{ marginBottom: 2 }} />
         <TextField
-          label="Name"
+          label="Username"
           variant="outlined"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          fullWidth
+          required
+          margin="normal"
+        />
+         <TextField
+          label="Email"
+          variant="outlined"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
           fullWidth
           required
           margin="normal"
         />
         <TextField
-          label="Email"
+          label="Password"
           variant="outlined"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
           fullWidth
           required
           margin="normal"
@@ -90,24 +104,17 @@ function AddNewStudentForm() {
           required
           margin="normal"
         />
-        <TextField
-          label="Progress"
+         <TextField
+          label="Address"
           variant="outlined"
-          value={progress}
-          onChange={(e) => setProgress(e.target.value)}
+          value={address}
+          onChange={(e) => setAddress(e.target.value)}
           fullWidth
           required
           margin="normal"
         />
-        <TextField
-          label="Status"
-          variant="outlined"
-          value={status}
-          onChange={(e) => setStatus(e.target.value)}
-          fullWidth
-          required
-          margin="normal"
-        />
+     
+     
         <Button type="submit" variant="contained" color="primary" sx={{ marginTop: 2 }}>
           Add Student
         </Button>

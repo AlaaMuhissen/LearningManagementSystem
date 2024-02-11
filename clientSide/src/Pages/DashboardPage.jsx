@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React , {useEffect , useState} from 'react';
 import { styled, useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import MuiDrawer from '@mui/material/Drawer';
@@ -6,6 +6,8 @@ import MuiAppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import List from '@mui/material/List';
 import CssBaseline from '@mui/material/CssBaseline';
+import DonutLargeIcon from '@mui/icons-material/DonutLarge';
+import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
@@ -24,6 +26,10 @@ import FetchStudentTable from '../Components/CreateTable/FetchStudentTable';
 import FetchLessonTable from '../Components/CreateTable/FetchLessonTable';
 import FetchExerciseTable from '../Components/CreateTable/FetchExerciseTable';
 import FetchExamTable from '../Components/CreateTable/FetchExamTable';
+import { useAuth } from '../Components/Login/AuthContext';
+import TitlePage from './TitlePAge';
+import LogoutIcon from '@mui/icons-material/Logout';
+import { Button } from '@mui/material';
 
 const drawerWidth = 240;
 
@@ -99,18 +105,28 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
   }),
 );
 
-const contentOptions = [
+const TeacherContentOptions = [
   { icon: <PiStudentFill fontSize={'24px'}/>, text: 'Student Data', component: <FetchStudentTable /> },
   { icon: <FaBookOpen fontSize={'24px'}/>, text: 'Lessons Data', component: <FetchLessonTable /> },
   { icon: <FaPencilRuler fontSize={'24px'}/>, text: 'Exercises Data', component: <FetchExerciseTable /> },
   { icon: <PiExamFill fontSize={'24px'} />, text: 'Exams Data', component: <FetchExamTable /> },
+
+];
+
+const StudentContentOptions = [
+  { icon: <FaPencilRuler fontSize={'24px'}/>, text: 'My Exercises', component: <TitlePage /> },
+  { icon: <DonutLargeIcon fontSize={'24px'}/>, text: 'My progress', component: <FetchStudentTable /> },
+  { icon: <PersonOutlineIcon fontSize={'24px'}/>, text: 'Profile', component: <FetchLessonTable /> },
+ 
 ];
 
 export default function DashboardPage() {
   const theme = useTheme();
+  const { userData ,logout } = useAuth();
   const [open, setOpen] = React.useState(true);
-  const [currentContent, setCurrentContent] = React.useState(contentOptions[0]);
-
+  const [currentContent, setCurrentContent] = React.useState(null);
+  const [currentIndex, setCurrentIndex] = React.useState(0);
+  const userRole = userData ? userData.role : '';
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -120,13 +136,21 @@ export default function DashboardPage() {
   };
 
   const handleContentChange = (index) => {
-    setCurrentContent(contentOptions[index]);
+    setCurrentIndex(index);
   };
+
+  useEffect(() => {
+    // Set content options based on user role
+    if (userRole === 'student') {
+      setCurrentContent(StudentContentOptions); // Set default content for students
+    } else {
+      setCurrentContent(TeacherContentOptions); // Set default content for teachers
+    }
+  }, [userRole]);
 
   return (
     <Box sx={{ display: 'flex', minHeight: '100vh', bgcolor: '#0d1d32', color: '#ffffff' }}>
-      <CssBaseline />
-      <AppBar position="fixed" open={open}>
+       <AppBar position="fixed" open={open}>
         <Toolbar sx= {{ bgcolor :"#193255"}}>
           <IconButton
             color="inherit"
@@ -141,12 +165,12 @@ export default function DashboardPage() {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" noWrap component="div">
-            Hi
+            {userData?.username}
           </Typography>
         </Toolbar>
       </AppBar>
       <Drawer variant="permanent" open={open}>
-        <DrawerHeader>
+      <DrawerHeader>
           <IconButton onClick={handleDrawerClose}>
             {theme.direction === 'rtl' ? (
               <ChevronRightIcon sx={{ color: '#ffffff'}} />
@@ -157,7 +181,7 @@ export default function DashboardPage() {
         </DrawerHeader>
         <Divider />
         <List>
-          {contentOptions.map((option, index) => (
+          {currentContent && currentContent.map((option, index) => (
             <ListItem key={option.text} disablePadding sx={{ display: 'block' }}>
               <ListItemButton
                 onClick={() => handleContentChange(index)}
@@ -181,18 +205,21 @@ export default function DashboardPage() {
                 <ListItemText primary={option.text} sx={{ opacity: open ? 1 : 0 }} />
               </ListItemButton>
             </ListItem>
-          ))}
+          ))
+          }
+            <button onClick={()=> {logout()}}><LogoutIcon/>LogOut</button> 
         </List>
       </Drawer>
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
         <DrawerHeader />
         <Box sx={{ margin: '20px' }}>
           <Typography variant="h4" gutterBottom>
-            {currentContent.text}
+            {currentContent?.[currentIndex]?.text}
           </Typography>
-          {currentContent.component}
+          {currentContent?.[currentIndex]?.component}
         </Box>
       </Box>
     </Box>
   );
 }
+

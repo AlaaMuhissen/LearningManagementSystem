@@ -4,23 +4,40 @@ import { auth } from '../../config/firebase';
 import { useNavigate } from 'react-router-dom';
 import LoginWithGmail from './LoginWithGmail';
 
-
-
 export default function LoginWithEmail() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [userRole, setUserRole] = useState('');
   const navigate = useNavigate();
 
   const signIn = async () => {
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
+      console.log(user);
       setIsAuthenticated(true);
+     fetchUserRole(user.email); // Fetch user role after authentication
     } catch (error) {
       console.log(error.message);
     }
   };
+
+ // Fetch user role from backend
+const fetchUserRole = async (email) => {
+  try {
+    const response = await fetch(`http://localhost:3001/api/students/getStudent/${encodeURIComponent(email)}`);
+    if (response.ok) {
+      const data = await response.json();
+      setUserRole(data.role);
+    } else {
+      console.error('Failed to fetch user role');
+    }
+  } catch (error) {
+    console.error('Error fetching user role:', error);
+  }
+};
+
 
   useEffect(() => {
     if (isAuthenticated) {

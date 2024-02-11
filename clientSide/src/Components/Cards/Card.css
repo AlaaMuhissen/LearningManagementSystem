@@ -1,0 +1,71 @@
+.jigsaw1 {
+    width: 6em;
+    height: 6em;
+    margin: 50px;
+    position: relative;
+    -webkit-border-radius: .5em;
+    -moz-border-radius: .5em;
+    border-radius: .5em;
+    cursor: pointer;
+  }
+  
+  .jigsaw1,
+  .jigsaw1 span {
+   background-color: #0284cf; 
+  }
+  
+  .text {
+    display: block;
+    color: #100F15;
+    font-size: 1.2em;
+    text-align: center;
+    padding: 0.9em 0 0 1.5em;
+    position: relative;
+    background: transparent !important;
+  }
+  
+  .jigsaw1 .t{
+   width: 2em;
+    height: 2em;
+    position: absolute;
+    top: -1.5em;
+    left: 2em;
+    -webkit-border-radius: 4em;
+    -moz-border-radius: 4em;
+    border-radius: 4em;
+  }
+  
+  .jigsaw1 .r{
+   width: 2em;
+    height: 2em;
+    position: absolute;
+    top: 2em;
+    left: 5.5em;
+    -webkit-border-radius: 4em;
+    -moz-border-radius: 4em;
+    border-radius: 4em;
+  }
+  
+  .jigsaw1 .b{ 
+   width: 1.8em;
+    height: 1.8em;
+    position: absolute;
+    top: 4.5em;
+    left: 2.2em;
+    -webkit-border-radius: 4em;
+    -moz-border-radius: 4em;
+    border-radius: 4em;
+    background-color: #0d1d32;
+  }
+  
+  .jigsaw1 .l { 
+   width: 1.8em;
+    height: 1.8em;
+    position: absolute;
+    top: 2.2em;
+    left: -.4em;
+    -webkit-border-radius: 4em;
+    -moz-border-radius: 4em;
+    border-radius: 4em;
+    background-color: #0d1d32;
+  }
