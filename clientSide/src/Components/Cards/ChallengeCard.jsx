@@ -32,7 +32,7 @@ function ChallengeCard({questionNum}) {
         Challenge {questionNum}
       </div>
       {/* status ?  */}
-      {<div className='flex justify-center items-center'><FaLock  fontSize={'32px'} color={'#FF4CB7'}/> </div>:  null}
+      {<div className='flex justify-center items-center'><FaLock  fontSize={'32px'} color={'#FF4CB7'}/> </div>}
     </div>
   </div>
 </>

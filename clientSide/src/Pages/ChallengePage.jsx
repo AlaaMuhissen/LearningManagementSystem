@@ -15,7 +15,7 @@ function ChallengePage() {
           .catch(error => {
             console.error('Error during fetching topics:', error);
           });
-      }, [syllabusId, language]);
+      }, []);
 
 
     },[])
