@@ -3,14 +3,14 @@ import { getIconComponent } from '../Logics/createIconComponent';
 import { useNavigate } from 'react-router-dom';
 import './Card.css'
 
-export default function LanguageCard({ icon, title }) {
+export default function LanguageCard({ icon, title , syllabusId}) {
 
   const IconComponent = getIconComponent(icon, '3rem', '#100F15'); 
 
   const navigate = useNavigate();
 
   const handleClick = () => {
-    // navigate(`/dashboard/${title}_Topics`);
+    navigate(`/dashboard/${syllabusId}/${title}`);
   };
 
   return (

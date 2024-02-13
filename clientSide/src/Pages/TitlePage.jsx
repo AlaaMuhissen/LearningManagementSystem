@@ -3,10 +3,11 @@ import { IoIosArrowBack ,IoIosArrowForward } from "react-icons/io";
 
 import LanguageCard from '../Components/Cards/LanguageCard';
 import HtmlTitle from '../Components/HtmlTitle';
+import { useSyllabus } from '../Components/SyllabusContext';
 
 
 function TitlePage() {
-  const syllabus = {"_id":{"$oid":"65ad09aada521fbc1d524387"},"syllabusCreator":"main","syllabusContent":[{"language":"html","icon":"TbFileTypeHtml","levelNum":{"$numberInt":"4"},"topics":["Basic_HTML_Structure","Headings_and_Paragraphs","Lists_and_Line_Breaks","Adding_Images","Adding_Links","Adding_Videos","Creating_Forms","Embedding_iframes","Semantic_HTML"],"minLevelQuestion":{"$numberInt":"5"},"maxPoints":{"$numberInt":"100"},"minPoints":{"$numberInt":"50"},"lanName":"html"},{"language":"css","icon":"PiFileCssBold","levelNum":{"$numberInt":"4"},"topics":["Basic CSS Syntax","Color and Background","Fonts and Text Styling","Box Model","Display and Position","Flexbox Basics","Grid Basics"],"minLevelQuestion":{"$numberInt":"5"},"maxPoints":{"$numberInt":"100"},"minPoints":{"$numberInt":"50"},"lanName":"css"}]};
+  const syllabus = useSyllabus();
   
   return (
      <>
@@ -16,9 +17,9 @@ function TitlePage() {
         <div className='flex flex-wrap '>
         {
           
-            syllabus&& syllabus.syllabusContent?.map((lan, i) => (
+            syllabus&& syllabus?.map((lan, i) => (
             
-                <LanguageCard icon= {lan.icon} title= {lan.lanName} key={i} />
+                <LanguageCard icon= {lan.icon} title= {lan.lanName} syllabusId={lan.id} key={i} />
             ))
         }
         </div>

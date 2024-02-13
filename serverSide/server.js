@@ -2,7 +2,10 @@ import express from 'express';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import { errorHandler } from './middleware/errorHandler.js';
-import StudentsRoutes from './routes/students.routes.js';
+import StudentsRoutes from './routes/Student/students.routes.js';
+import TopicsRoutes from './routes/Student/topics.routes.js'
+import SyllabusRoutes from './routes/syllabus.routes.js'
+import QuestionAndAnswerRoutes from './routes/Student/questionAndAnswer.routes.js'
 // import ExamsRoutes from './routes/exams.routes.js';
 // import ExercisesRoutes from './routes/exercises.routes.js';
 // import LessonsRoutes from './routes/lessons.routes.js';
@@ -15,6 +18,9 @@ dotenv.config();
 app.use(express.json());
 
 app.use('/api/students', StudentsRoutes);
+app.use('/api/topics', TopicsRoutes);
+app.use('/api/syllabus', SyllabusRoutes);
+app.use('/api/QA', QuestionAndAnswerRoutes);
 // app.use('/api/lessons', LessonsRoutes);
 // app.use('/api/exams', ExamsRoutes);
 // app.use('/api/exercises', ExercisesRoutes);

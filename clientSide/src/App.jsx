@@ -8,23 +8,37 @@ import AddNewLessonForm from './Components/AddForm/AddNesLesson'
 import AddNewExamForm from './Components/AddForm/AddNewExam'
 import AddNewExerciseForm from './Components/AddForm/AddNewExercise'
 import DashboardPage from './Pages/DashboardPage'
+import { SyllabusProvider } from './Components/SyllabusContext'
+import LanguageTopicsPage from './Pages/LanguageTopicsPage'
+import { TopicsProvider } from './Components/TopicsContext'
+import LevelsPage from './Pages/LevelsPage'
+
 
 function App() {
   
 
   return (
     <>
-      <BrowserRouter>
+    <BrowserRouter>
+     <SyllabusProvider>
       <AuthProvider>
-        <Routes>
-        <Route path='/' element={<LoginPage/>} />
-            <Route path='/dashboard' element={<DashboardPage />} />
-            <Route path='/addStudent' element={<AddNewStudentForm />} />
-            <Route path='/addLesson' element={<AddNewLessonForm />} />
-            <Route path='/addExam' element={<AddNewExamForm />} />
-            <Route path='/addExercise' element={<AddNewExerciseForm />} />   
-        </Routes>
-        </AuthProvider>
+   
+                <TopicsProvider>
+          <Routes>
+            <Route path='/' element={<LoginPage/>} />
+                <Route path='/dashboard' element={<DashboardPage />} />                
+  
+                  <Route path='/dashboard/:syllabusId/:language' element={<LanguageTopicsPage />} />
+                  <Route path='/dashboard/:syllabusId/:language/:topic/levels' element={<LevelsPage />} />
+               
+                <Route path='/addStudent' element={<AddNewStudentForm />} />
+                <Route path='/addLesson' element={<AddNewLessonForm />} />
+                <Route path='/addExam' element={<AddNewExamForm />} />
+                <Route path='/addExercise' element={<AddNewExerciseForm />} />   
+            </Routes>
+                </TopicsProvider>
+         </AuthProvider>
+      </SyllabusProvider>
     </BrowserRouter>
  
 
