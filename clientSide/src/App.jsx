@@ -12,6 +12,8 @@ import { SyllabusProvider } from './Components/SyllabusContext'
 import LanguageTopicsPage from './Pages/LanguageTopicsPage'
 import { TopicsProvider } from './Components/TopicsContext'
 import LevelsPage from './Pages/LevelsPage'
+import ChallengePage from './Pages/ChallengePage'
+import HTMLPage from './Pages/HTMLPage'
 
 
 function App() {
@@ -30,7 +32,8 @@ function App() {
   
                   <Route path='/dashboard/:syllabusId/:language' element={<LanguageTopicsPage />} />
                   <Route path='/dashboard/:syllabusId/:language/:topic/levels' element={<LevelsPage />} />
-               
+                  <Route path='/dashboard/:syllabusId/:language/:topic/levels/:levelNum/challenges' element={<ChallengePage />} />
+                  <Route path='/dashboard/:syllabusId/:language/:topic/levels/:levelNum/challenges/:challengeNum' element={<HTMLPage/>} />
                 <Route path='/addStudent' element={<AddNewStudentForm />} />
                 <Route path='/addLesson' element={<AddNewLessonForm />} />
                 <Route path='/addExam' element={<AddNewExamForm />} />
