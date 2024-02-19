@@ -10,6 +10,7 @@ function ChallengeCard({questionNum ,question}) {
   // const language = useParams()["language_Topics"].split("_")[0];
   // const progress = JSON.parse(localStorage.getItem("progress"));
   
+  
   // const currentQuestion = progress?.find((progressItem) => progressItem.name === language)?.topics
   //   .find((topicData) => topicData.name === topic)?.levels[parseInt(levelNum) - 1]?.currentQuestion || 0;
   
