@@ -1,11 +1,14 @@
 import { Router } from "express";
 
-import { insertStudentProgress ,getFormattedProgressData ,checkAndUpdateProgress, updateLevelProgress} from "../../controller/Student/studentProgress.js";
+import { insertStudentProgress  ,checkAndUpdateProgress, updateLevelProgress, updateLanguageStartStatus, updateLanguageFinishStatus} from "../../controller/Student/studentProgress.js";
 const router = Router();
 
 
-router.get("/createStudentProgress/:studentId/:syllabus_id" , insertStudentProgress);
-router.get("/getStudentProgress/:student_id" , getFormattedProgressData);
+router.post("/createStudentProgress/:studentId/:syllabus_id" , insertStudentProgress);
+// router.get("/getStudentProgress/:student_id" , getFormattedProgressData);
+router.put("/updateLanguageStartStatus/:student_id" , updateLanguageStartStatus);
+router.put("/updateLanguageFinishStatus/:student_id" , updateLanguageFinishStatus);
+
 router.put("/updateProgress" , checkAndUpdateProgress);
 router.put("/updateLevel" , updateLevelProgress);
 // router.get("/getLevelNum" , getLevelNum);

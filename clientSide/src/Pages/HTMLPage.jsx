@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useLocation, useNavigate , useParams} from 'react-router-dom';
 import DragAndDropQuiz from '../Components/Game/DragAndDropQuiz';
 import { useTopics } from '../Components/TopicsContext';
+import { useAuth } from '../Components/Login/AuthContext';
 
 
 // import DragAndDropQuiz from '../Component/DragAndDropQuiz';
@@ -11,12 +12,23 @@ function HTMLPage() {
     // const syllabus =  useSyllabus();
     const [questions , setQuestions] = useState([]);
     const location = useLocation();
+    const [languageId , setLanguageId] = useState(0);
   
+    const { userData  } = useAuth();
+    console.log(userData);
     const navigate =useNavigate ();
   
     const {challengeNum ,levelNum ,topic , language ,syllabusId}  = useParams();
 
     useEffect(()=>{
+      fetch(`http://localhost:3001/api/syllabus/getLanguageId/${syllabusId}/${language}`)
+      .then(res => res.json())
+      .then(data => {
+        setLanguageId(data[0].language_id);
+      })
+      .catch(error => {
+        console.error('Error during fetching topics:', error);
+      });
       fetch(`http://localhost:3001/api/QA/getAllQuestionAndAnswer/${syllabusId}/${language}`)
         .then(res => res.json())
         .then(data => {
@@ -26,6 +38,7 @@ function HTMLPage() {
           console.error('Error during fetching topics:', error);
         });
   },[])
+ 
     console.log(questions);
     
     // Get questions for the specified levelNumber
@@ -80,8 +93,9 @@ function HTMLPage() {
        level={levelNum}
        qNum = {challengeNum}
        lan = {language}
+       lanId = {languageId}
        topic = {topic}
-       allQuestionNum = {2}
+       allQuestionNum = {questions[levelNum].length}
        reward ={levelQuestions[challengeNum].reward}
  
        />
