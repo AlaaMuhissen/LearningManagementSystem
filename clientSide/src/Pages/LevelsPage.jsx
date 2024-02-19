@@ -9,24 +9,12 @@ import LevelCard from '../Components/Cards/LevelCard';
 
 function LevelsPage() {
   const {language ,topic , syllabusId} = useParams();
-  const [questions ,setQuestions] = useState();
-  
+ 
   const topics = useTopics();
   console.log(topics);
   
   const levels = topics.filter(top => top.topic_name === topic);
-  useEffect(()=>{
-    fetch(`http://localhost:3001/api/QA/getAllQuestionAndAnswer/${syllabusId}/${language}`)
-      .then(res => res.json())
-      .then(data => {
-        setQuestions(data);
-      })
-      .catch(error => {
-        console.error('Error during fetching topics:', error);
-      });
-},[])
-  console.log(questions);
-  
+
 
   return (
      <>
@@ -43,7 +31,6 @@ function LevelsPage() {
             topic ={topic}
             levelNumber= {details.level_id}
             questionNum={details.questionsNum} 
-            questions= {questions}
             />
        ))
        }
