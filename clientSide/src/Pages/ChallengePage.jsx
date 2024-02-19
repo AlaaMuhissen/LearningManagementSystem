@@ -7,7 +7,7 @@ import { useTopics } from '../Components/TopicsContext.jsx';
 function ChallengePage() {
     const location = useLocation();
   ;
-    const [questions ,setQuestions] = useState(location.state.questions);
+    const [questions ,setQuestions] = useState();
     const {topic ,syllabusId ,language} = useParams();
     const topics = useTopics();
     console.log(topics);
@@ -26,7 +26,7 @@ function ChallengePage() {
     console.log(questions);
     
     // Get questions for the specified levelNumber
-    const levelQuestions = questions[levelNumber]; 
+    const levelQuestions = questions&&questions[levelNumber]; 
     console.log(levelQuestions);
 
 
@@ -35,7 +35,7 @@ function ChallengePage() {
             <div className='p-4 md:p-8 lg:p-12 xl:p-16'>
                 <HtmlTitle title={"Embark on Your Daily Adventure, Little Explorer! "}/>
                 <div className='flex flex-wrap '>
-                    {levelQuestions.map((question ,index) => (
+                    {levelQuestions?.map((question ,index) => (
                         <ChallengeCard questionNum={index} question={levelQuestions} key={index} />
                     ))}
                 </div>

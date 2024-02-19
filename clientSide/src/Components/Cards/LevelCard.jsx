@@ -2,9 +2,9 @@ import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import LanguageCard from './LanguageCard';
 
-function LevelCard({syllabusId ,language,topic,levelNumber,questionNum,questions }) {
+function LevelCard({syllabusId ,language,topic,levelNumber,questionNum, }) {
   const navigate = useNavigate();
-  console.log(questions);
+
 
 //   const progress = JSON.parse(localStorage.getItem("progress"));
   
@@ -19,7 +19,7 @@ function LevelCard({syllabusId ,language,topic,levelNumber,questionNum,questions
 
   const handleClick = () =>{
     navigate(`/dashboard/${syllabusId}/${language}/${topic}/levels/${levelNumber}/challenges`, {
-      state: { questions ,levelNumber},
+      state: { levelNumber},
   
     });
   }
