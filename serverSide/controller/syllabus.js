@@ -28,9 +28,9 @@ export const getSyllabus = async (req, res) => {
       `;
   
       const [rows] = await pool.query(query, [lanName, syllabus_id]);
-      res.status(200).json(rows);
+      return res.status(200).json(rows);
     } catch (error) {
       console.error('Error fetching progress data:', error);
-      res.status(500).json({ error: 'Internal server error' });
+      return res.status(500).json({ error: 'Internal server error' });
     }
   };

@@ -181,4 +181,47 @@ export const deleteStudent = async (req, res) => {
   }
 };
 
+export const getPointsForStudent = async (req, res) => {
+  
+  const { user_id } = req.params;
+  console.log(user_id);
+  try {
+    const query = `
+      SELECT Points
+      FROM student
+      WHERE user_id = ?
+    `;
+    const [rows] = await pool.query(query, [user_id]);
+
+    if (rows.length === 0) {
+      return res.status(404).json({ error: "No points found for the user_id" });
+    }
+    const points = rows[0].Points;
+    return res.status(200).json({ points });
+  } catch (error) {
+    console.error("Error fetching points:", error);
+    return res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+
+export const updatePointsFoStudent = async (req, res) => {
+  const { user_id } = req.params;
+  const { points } = req.body;
+
+  try {
+    const updateQuery = `
+      UPDATE student
+      SET Points = ?
+      WHERE user_id = ?
+    `;
+    await pool.query(updateQuery, [points, user_id]);
+    return res.status(200).json({ message: "Points updated successfully" });
+  } catch (error) {
+    console.error("Error updating points:", error);
+    return res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+
 
