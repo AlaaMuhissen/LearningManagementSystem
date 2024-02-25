@@ -30,6 +30,8 @@ import { useAuth } from '../Components/Login/AuthContext';
 import TitlePage from './TitlePAge';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { Button } from '@mui/material';
+import { usePoints } from '../Components/PointsContext';
+import { ShowProgress } from './ShowProgress';
 
 const drawerWidth = 240;
 
@@ -115,7 +117,7 @@ const TeacherContentOptions = [
 
 const StudentContentOptions = [
   { icon: <FaPencilRuler fontSize={'24px'}/>, text: 'My Exercises', component: <TitlePage /> },
-  { icon: <DonutLargeIcon fontSize={'24px'}/>, text: 'My progress', component: <FetchStudentTable /> },
+  { icon: <DonutLargeIcon fontSize={'24px'}/>, text: 'My progress', component: <ShowProgress /> },
   { icon: <PersonOutlineIcon fontSize={'24px'}/>, text: 'Profile', component: <FetchLessonTable /> },
  
 ];
@@ -123,10 +125,12 @@ const StudentContentOptions = [
 export default function DashboardPage() {
   const theme = useTheme();
   const { userData ,logout } = useAuth();
-  const [open, setOpen] = React.useState(true);
-  const [currentContent, setCurrentContent] = React.useState(null);
-  const [currentIndex, setCurrentIndex] = React.useState(0);
+  const [open, setOpen] = useState(true);
+  const [currentContent, setCurrentContent] = useState(null);
+  let userPoints = 0;
+  const [currentIndex, setCurrentIndex] = useState(0);
   const userRole = userData ? userData.role : '';
+  const { points } = usePoints();
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -140,11 +144,13 @@ export default function DashboardPage() {
   };
 
   useEffect(() => {
-    // Set content options based on user role
     if (userRole === 'student') {
-      setCurrentContent(StudentContentOptions); // Set default content for students
+      setCurrentContent(StudentContentOptions); 
+    
+      console.log(points);
+      // userPoints = points;
     } else {
-      setCurrentContent(TeacherContentOptions); // Set default content for teachers
+      setCurrentContent(TeacherContentOptions); 
     }
   }, [userRole]);
 
@@ -167,6 +173,9 @@ export default function DashboardPage() {
           <Typography variant="h6" noWrap component="div">
             {userData?.username}
           </Typography>
+          {userData?.role === "student" && <Typography variant="h6" noWrap component="div">
+             ,Points: {userPoints}
+          </Typography>}
         </Toolbar>
       </AppBar>
       <Drawer variant="permanent" open={open}>

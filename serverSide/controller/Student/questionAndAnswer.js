@@ -1,16 +1,22 @@
 import pool from "../../config/db.js";
 
 export const getAllQuestionAndAnswer = async (req, res) => {
-  const { syllabusId, languageName } = req.params;
+  const { syllabusId, languageName ,topic_name } = req.params;
   try {
       // Fetch questions and answers from the database
+      const [row] = await pool.execute(`
+      SELECT id FROM topics WHERE topic_name = ?
+  `, [topic_name]);
+
+  console.log(row);
+
       const [results] = await pool.execute(`
           SELECT q.id AS question_id, q.question_text, q.reward, q.level, a.id AS answer_id, a.value AS answer_value
           FROM question q
           JOIN answer a ON q.id = a.question_id
-          WHERE q.syllabus_id = ? AND q.lanName = ?
+          WHERE q.syllabus_id = ? AND q.lanName = ? AND q.topic_id = ?
           ORDER BY q.level, q.id, a.id
-      `, [syllabusId, languageName]);
+      `, [syllabusId, languageName ,row[0].id]);
 
       // Organize the data into an object by level
       const questionsByLevel = {};

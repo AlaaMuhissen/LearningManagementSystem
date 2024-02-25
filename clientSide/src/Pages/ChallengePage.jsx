@@ -14,7 +14,7 @@ function ChallengePage() {
     
     const levelNumber = location.state.levelNumber|| topics.filter(top => top.topic_name === topic);
     useEffect(()=>{
-      fetch(`http://localhost:3001/api/QA/getAllQuestionAndAnswer/${syllabusId}/${language}`)
+      fetch(`http://localhost:3001/api/QA/getAllQuestionAndAnswer/${syllabusId}/${language}/${topic}`)
         .then(res => res.json())
         .then(data => {
           setQuestions(data);
@@ -35,9 +35,13 @@ function ChallengePage() {
             <div className='p-4 md:p-8 lg:p-12 xl:p-16'>
                 <HtmlTitle title={"Embark on Your Daily Adventure, Little Explorer! "}/>
                 <div className='flex flex-wrap '>
-                    {levelQuestions?.map((question ,index) => (
-                        <ChallengeCard questionNum={index} question={levelQuestions} key={index} />
-                    ))}
+                {!levelQuestions ? (
+                    <p>No challenges yet</p>
+                  ) : (
+                    levelQuestions.map((question, index) => (
+                      <ChallengeCard questionNum={index} question={levelQuestions} key={index} />
+                    ))
+                  )}
                 </div>
             </div>
         </>

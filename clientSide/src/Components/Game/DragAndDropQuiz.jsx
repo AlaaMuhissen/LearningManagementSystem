@@ -13,6 +13,7 @@ import ohNoSound from '/sounds/oh-no-113125.mp3';
 import wahSound from '/sounds/wah-wah-sad-trombone-6347.mp3';
 import CodeLevel from './CodeLevel';
 import { useAuth } from '../Login/AuthContext';
+import { usePoints } from '../PointsContext';
 
 export default function DragAndDropQuiz({
   syllabusId,
@@ -27,28 +28,31 @@ export default function DragAndDropQuiz({
   allQuestionNum,
   reward
 }) {
+  const { points, updatePoints } = usePoints();
   const navigate = useNavigate();
   const [userAnswer, setUserAnswer] = useState([]);
   const { userData  } = useAuth();
+  const userId = userData?.id;
   const [isRun, setIsRun] = useState(false);
   const [counter, setCounter] = useState(0);
-  const [correctAnswer, setCorrectAnswer] = useState(false); // State to track if answer is correct
+  const [correctAnswer, setCorrectAnswer] = useState(false);
   const [play] = useSound(coinsSound);
   const [playOhNo] = useSound(ohNoSound);
   const [playWah] = useSound(wahSound);
   const [resultHtml, setResultHtml] = useState('');
 
+  
+
   useEffect(() => {
-    if (correctAnswer) { // Only run if the answer is correct
-     
+    if (correctAnswer) { 
       fetch(`http://localhost:3001/api/progress/updateProgress`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json"
         },
         body: JSON.stringify({
-          student_id: userData?.id,
-          syllabus_id: parseInt(syllabusId),
+          student_id: userId,
+          syllabus_id: syllabusId,
           language_id: lanId,
           topic_name: topic,
           level: level,
@@ -62,12 +66,12 @@ export default function DragAndDropQuiz({
         .catch(error => {
           console.error('Error during fetching topics:', error);
         });
+
     }
-  }, [correctAnswer]); // Run only when correctAnswer changes
+  }, [correctAnswer]); 
 
   const handleCorrectAnswer = () => {
     const wrongAnswer = userAnswer.filter((ans) => ans.id !== ans.boardId);
-
     if (
       (userAnswer.length === answer.length &&
         userAnswer.every((obj1) =>
@@ -81,14 +85,29 @@ export default function DragAndDropQuiz({
       setCounter(0);
       play();
       toast("User's answer is correct!");
-      setCorrectAnswer(true); // Set correctAnswer to true when answer is correct
+      setCorrectAnswer(true);
+      const newPoints = points + reward;
+      
+      updatePoints(newPoints);
+      if (qNum + 1 >= allQuestionNum) {
+        setTimeout(() => {
+          navigate(`/dashboard/${syllabusId}/${lan}/${topic}/levels/${level + 1}/challenges/${0}`);
+          window.location.reload();
+       
+        }, 2500);
+      } else {
+        setTimeout(() => {
+          navigate(`/dashboard/${syllabusId}/${lan}/${topic}/levels/${level}/challenges/${qNum + 1}`);
+          window.location.reload();
+        }, 2500);
+      }
       setResultHtml(userAnswer.map((block) => block.value).join(''));
     } else {
       console.log('Try Again');
       console.log(userAnswer.length);
       console.log(answer.length);
       playOhNo();
-      setCorrectAnswer(false); // Set correctAnswer to false if answer is not correct
+      setCorrectAnswer(false); 
     }
   };
 
