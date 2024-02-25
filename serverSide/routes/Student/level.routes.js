@@ -4,7 +4,7 @@ import { getAllQuestionAndAnswer } from "../../controller/Student/questionAndAns
 const router = Router();
 
 
-router.get("/getAllQuestionAndAnswer/:syllabusId/:languageName/:topic_name" , getAllQuestionAndAnswer);
+router.get("/getLevels/:syllabus_id/:language_id/:topic_id" , getAllQuestionAndAnswer);
 // router.get("/getLevelAndQuestionNumForTopic/:syllabusId/:languageName" , getLevelAndQuestionNumForTopic);
 // router.get("/getStudent/:email",getStudentByEmail);
 // router.post("/addNewStudent", createNewStudent);

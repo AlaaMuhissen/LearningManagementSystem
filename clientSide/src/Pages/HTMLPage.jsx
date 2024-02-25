@@ -14,9 +14,10 @@ function HTMLPage() {
     const location = useLocation();
     const [languageId , setLanguageId] = useState(0);
   
+  
     const { userData  } = useAuth();
     console.log(userData);
-    const navigate =useNavigate ();
+    const navigate = useNavigate ();
   
     const {challengeNum ,levelNum ,topic , language ,syllabusId}  = useParams();
 
@@ -29,7 +30,7 @@ function HTMLPage() {
       .catch(error => {
         console.error('Error during fetching topics:', error);
       });
-      fetch(`http://localhost:3001/api/QA/getAllQuestionAndAnswer/${syllabusId}/${language}`)
+      fetch(`http://localhost:3001/api/QA/getAllQuestionAndAnswer/${syllabusId}/${language}/${topic}`)
         .then(res => res.json())
         .then(data => {
           setQuestions(data);
@@ -86,14 +87,14 @@ function HTMLPage() {
   
     <div className='p-4 md:p-8 lg:p-12 xl:p-16'>
     {(questions.length !== 0) && <DragAndDropQuiz 
-       syllabusId= {syllabusId}
+       syllabusId= {parseInt(syllabusId)}
        question= {levelQuestions[challengeNum].question_text}
        availableBlocks={levelQuestions[challengeNum].answer_values}
        answer={levelQuestions[challengeNum].answer_values}
-       level={levelNum}
-       qNum = {challengeNum}
+       level={parseInt(levelNum)}
+       qNum = {parseInt(challengeNum)}
        lan = {language}
-       lanId = {languageId}
+       lanId = {parseInt(languageId)}
        topic = {topic}
        allQuestionNum = {questions[levelNum].length}
        reward ={levelQuestions[challengeNum].reward}

@@ -2,20 +2,8 @@ import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import LanguageCard from './LanguageCard';
 
-function LevelCard({syllabusId ,language,topic,levelNumber,questionNum, }) {
+function LevelCard({syllabusId ,language,topic,levelNumber }) {
   const navigate = useNavigate();
-
-
-//   const progress = JSON.parse(localStorage.getItem("progress"));
-  
-//   const currentQuestion = progress?.find((progressItem) => progressItem.name === language)?.topics
-//     .find((topicData) => topicData.name === topic)?.levels[parseInt(levelNumber) - 1]?.currentQuestion || 0;
-
-   
-  
-//     const levelStatus = progress?.find((progressItem) => progressItem.name === language)?.topics
-//       .find((topicData) => topicData.name === topic)?.levels[parseInt(levelNumber) - 1].completed;
-     
 
   const handleClick = () =>{
     navigate(`/dashboard/${syllabusId}/${language}/${topic}/levels/${levelNumber}/challenges`, {

@@ -3,6 +3,7 @@ import { useDrag } from 'react-dnd'
 
 
 
+
 export default function CodeBlock({id, value}) {
  
     const [{ isDragging }, drag] = useDrag(() => ({
@@ -13,28 +14,30 @@ export default function CodeBlock({id, value}) {
         }),
       }));
       return (
-      
         <div
-        className='rounded-lg'
+          className='rounded-lg'
           ref={drag}  
-          id = {id}  
+          id={id}  
           style={{ 
-         
-            border: isDragging ? "4px solid #FF4CB7" : "0px" ,
-            width : "70px",
-            height :"70px",
+            border: isDragging ? "4px solid #FF4CB7" : "0px",
+            minWidth : "70px",
+            minHeight: "70px",
             backgroundColor: "#fff",
             color: "#4E75FF",
-            display:"flex",
-            fontWeight:'600',
+            display: "flex",
+            fontWeight: '600',
             justifyContent: "center",
-            alignItems:"center",
-            textAlign:"center",
-         
-           }}
+            alignItems: "center",
+            textAlign: "center",
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+            wordWrap: "break-word",
+            padding: "4px",
+          }}
+        
         >
-            {value}
-        </div>
-      
+          {value}
+          </div>
       );
-}
+      
+        };

@@ -14,6 +14,11 @@ import { TopicsProvider } from './Components/TopicsContext'
 import LevelsPage from './Pages/LevelsPage'
 import ChallengePage from './Pages/ChallengePage'
 import HTMLPage from './Pages/HTMLPage'
+import { PointsProvider } from './Components/PointsContext'
+import { LanguageStatusProvider } from './Components/LanguageStatusContext'
+import { ShowProgress } from './Pages/ShowProgress'
+
+
 
 
 function App() {
@@ -23,9 +28,10 @@ function App() {
     <>
     <BrowserRouter>
      <SyllabusProvider>
-      <AuthProvider>
-   
+      <AuthProvider>     
                 <TopicsProvider>
+                  <PointsProvider>
+                    <LanguageStatusProvider>
           <Routes>
             <Route path='/' element={<LoginPage/>} />
                 <Route path='/dashboard' element={<DashboardPage />} />                
@@ -39,6 +45,8 @@ function App() {
                 <Route path='/addExam' element={<AddNewExamForm />} />
                 <Route path='/addExercise' element={<AddNewExerciseForm />} />   
             </Routes>
+            </LanguageStatusProvider>
+            </PointsProvider>
                 </TopicsProvider>
          </AuthProvider>
       </SyllabusProvider>

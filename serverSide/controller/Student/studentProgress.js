@@ -114,15 +114,36 @@ export const getLanguageStatus = async (req, res) => {
           WHERE student_id = ? AND language_id = ? AND syllabus_id = ?
       `;
       
-      await pool.query(query, [student_id, language_id ,syllabus_id]);
+      const [status] = await pool.query(query, [student_id, language_id ,syllabus_id]);
       
-      res.status(200).json({ message: 'Fetching Language status  done successfully' });
+      res.status(200).json(status);
   } catch (error) {
       console.error('Error Fetching progress data:', error);
       res.status(500).json({ error: 'Internal server error' });
   }
 };
 
+export const getTopicProgress = async (req, res) => {
+  const { student_id} = req.params; 
+  try {
+    const studentIdQuery = `SELECT id FROM student WHERE user_id = ?`;
+  
+    const [student] = await pool.query(studentIdQuery, [student_id]);
+    const studentId = student[0].id;
+
+      const query = `
+          SELECT  *  FROM topic_progress
+          WHERE student_id = ? 
+      `;
+      
+      const [topicProgress]= await pool.query(query, [studentId]);
+      
+      res.status(200).json(topicProgress);
+  } catch (error) {
+      console.error('Error Fetching progress data:', error);
+      res.status(500).json({ error: 'Internal server error' });
+  }
+};
 export const checkAndUpdateProgress = async(req, res) => {
   const { student_id, syllabus_id, language_id, topic_name ,level, questionNum} = req.body;
   
@@ -187,7 +208,8 @@ const checkOrUpdateLevelProgress = async (req, res, topic_id, student_id) => {
       const updatedCurrQuestion = currQuestion + 1;
 
       // Update the completed boolean to 1 if all questions in the level are completed
-      if (updatedCurrQuestion >= questionNum) {
+      console.log(`updatedQuestion is ${updatedCurrQuestion} and the question number ${questionNum}`)
+      if (updatedCurrQuestion >= (questionNum-1)) {
         const updateLevelStatusQuery = `UPDATE level_progress SET completed = 1 WHERE id = ?`;
         await pool.query(updateLevelStatusQuery, [id]);
       }
@@ -374,4 +396,35 @@ export const getLevelNum = async (req, res) => {
       return res.status(500).json({ error: "Internal server error" });
   }
 };
+
+export const getLevelProgress = async (req, res) =>{
+    const {student_id ,syllabus_id,topic_id } = req.params;
+    console.log(student_id);
+
+    try{
+      const studentIdQuery = `SELECT id FROM student WHERE user_id = ?`;
+    
+      const [student] = await pool.query(studentIdQuery, [student_id]);
+      const studentId = student[0].id;
+
+      const query = `
+          SELECT *
+          FROM level_progress
+          WHERE student_id = ?
+          AND syllabus_id = ?
+          AND topic_id = ?
+      `;
+      const [rows] = await pool.query(query, [studentId ,  syllabus_id,topic_id]);
+
+      if (rows.length === 0) {
+          return res.status(404).json({ error: "No data found" });
+      }
+      res.status(200).json(rows) ;
+      
+    }catch (error) {
+      console.error("Error fetching rows:", error);
+      return res.status(500).json({ error: "Internal server error" });
+  }
+
+}
 

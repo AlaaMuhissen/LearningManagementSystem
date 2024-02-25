@@ -6,10 +6,11 @@ export const TopicsProvider = ({ children }) => {
   const [topics, setTopics] = useState([]);
   const [syllabusId, setSyllabusId] = useState(null);
   const [language, setLanguage] = useState(null);
+ 
 
   useEffect(() => {
     if (syllabusId && language) {
-      fetch(`http://localhost:3001/api/topics/getLevelAndQuestionNumForTopic/${syllabusId}/${language}`)
+      fetch(`http://localhost:3001/api/topics/getTopicsAndLevelsBasedOnLanguage/${syllabusId}/${language}`)
         .then(res => res.json())
         .then(data => {
           setTopics(data);
@@ -18,22 +19,23 @@ export const TopicsProvider = ({ children }) => {
           console.error('Error during fetching topics:', error);
         });
     }
-  }, [syllabusId, language]);
+  }, [syllabusId, language ]);
 
   return (
-    <TopicsContext.Provider value={{ topics, setSyllabusId, setLanguage }}>
+    <TopicsContext.Provider value={{ topics, setSyllabusId, setLanguage  }}>
       {children}
     </TopicsContext.Provider>
   );
 };
 
 export const useTopics = (syllabusId, language) => {
-  const { topics, setSyllabusId, setLanguage } = useContext(TopicsContext);
+  const { topics, setSyllabusId, setLanguage ,setTopicName } = useContext(TopicsContext);
 
   useEffect(() => {
     setSyllabusId(syllabusId);
     setLanguage(language);
-  }, [setSyllabusId, setLanguage, syllabusId, language]);
+
+  }, [setSyllabusId, setLanguage, syllabusId, language ,setTopicName ]);
 
   return topics;
 };
