@@ -109,12 +109,16 @@ export const updateLanguageStatus = async (req, res) => {
 export const getLanguageStatus = async (req, res) => {
   const { student_id ,language_id , syllabus_id} = req.params; 
   try {
+    const studentIdQuery = `SELECT id FROM student WHERE user_id = ?`;
+  
+    const [student] = await pool.query(studentIdQuery, [student_id]);
+    const studentId = student[0].id;
       const query = `
           SELECT  started, finished  FROM student_progress
           WHERE student_id = ? AND language_id = ? AND syllabus_id = ?
       `;
       
-      const [status] = await pool.query(query, [student_id, language_id ,syllabus_id]);
+      const [status] = await pool.query(query, [studentId, language_id ,syllabus_id]);
       
       res.status(200).json(status);
   } catch (error) {
@@ -124,7 +128,7 @@ export const getLanguageStatus = async (req, res) => {
 };
 
 export const getTopicProgress = async (req, res) => {
-  const { student_id} = req.params; 
+  const { student_id ,syllabus_id , language_id} = req.params; 
   try {
     const studentIdQuery = `SELECT id FROM student WHERE user_id = ?`;
   
@@ -133,10 +137,10 @@ export const getTopicProgress = async (req, res) => {
 
       const query = `
           SELECT  *  FROM topic_progress
-          WHERE student_id = ? 
+          WHERE student_id = ? AND syllabus_id = ? AND language_id = ?  
       `;
       
-      const [topicProgress]= await pool.query(query, [studentId]);
+      const [topicProgress]= await pool.query(query, [studentId, syllabus_id , language_id]);
       
       res.status(200).json(topicProgress);
   } catch (error) {
@@ -177,7 +181,6 @@ export const checkAndUpdateProgress = async(req, res) => {
             checkOrUpdateLevelProgress(req, res,topicProgress.insertId ,studentId);
          }
          else {
-         
            checkOrUpdateLevelProgress(req, res , topicResults[0].id,studentId);
         }
   }catch(err){
@@ -209,24 +212,32 @@ const checkOrUpdateLevelProgress = async (req, res, topic_id, student_id) => {
 
       // Update the completed boolean to 1 if all questions in the level are completed
       console.log(`updatedQuestion is ${updatedCurrQuestion} and the question number ${questionNum}`)
-      if (updatedCurrQuestion >= (questionNum-1)) {
-        const updateLevelStatusQuery = `UPDATE level_progress SET completed = 1 WHERE id = ?`;
-        await pool.query(updateLevelStatusQuery, [id]);
+      if (updatedCurrQuestion === questionNum) {
+        const updateLevelStatusQuery = `UPDATE level_progress SET completed = 1, currQuestion = ? WHERE id = ?`;
+        await pool.query(updateLevelStatusQuery, [questionNum, id]);
+        res.status(200).json(updateLevelStatusQuery);
       }
-
-      // Update the currQuestion value
-      const updateLevelProgressQuery = `UPDATE level_progress SET currQuestion = ? WHERE id = ?`;
-      const [updateRow] = await pool.query(updateLevelProgressQuery, [updatedCurrQuestion, id]);
-
-      res.status(200).json(updateRow);
+       else{
+         // Update the currQuestion value
+         const updateLevelProgressQuery = `UPDATE level_progress SET currQuestion = ? WHERE id = ?`;
+         const [updateRow] = await pool.query(updateLevelProgressQuery, [updatedCurrQuestion, id]);
+         res.status(200).json(updateRow);
+        }
     } else {
+
       // If no row found, create one
       const insertLevelProgressQuery = `
         INSERT INTO level_progress 
           (student_id, syllabus_id, language_id, topic_id, level_id, currQuestion, completed) 
         VALUES (?, ?, ?, ?, ?, ?, ?)
       `;
-      const [newLevelRow] = await pool.query(insertLevelProgressQuery, [student_id, syllabus_id, language_id, topic_id, parseInt(level), 0, 0]);
+      const [newLevelRow] = await pool.query(insertLevelProgressQuery, [student_id, syllabus_id, language_id, topic_id, parseInt(level), 1, 0]);
+
+      if(questionNum === 1){
+        console.log('here')
+        const updateLevelStatusQuery = `UPDATE level_progress SET completed = 1 WHERE id = ?`;
+        await pool.query(updateLevelStatusQuery, [newLevelRow.insertId]);
+      }
 
       res.status(200).json(newLevelRow);
     }
@@ -237,16 +248,16 @@ const checkOrUpdateLevelProgress = async (req, res, topic_id, student_id) => {
 };
 
 export const getQuestionsNum = async (req, res) => {
-  const { syllabus_id, language_id, current_Level } = req.body;
-
+  const { syllabus_id, language_id, topic_id, current_Level } = req.params;
+  console.log(syllabus_id, language_id, topic_id, current_Level)
   try {
       // Query the database to get the questionsNum
       const query = `
           SELECT questionsNum
           FROM level
-          WHERE syllabus_id = ? AND language_id = ? AND current_Level = ?
+          WHERE syllabus_id = ? AND language_id = ? AND current_Level = ? AND topic_id = ?
       `;
-      const [rows] = await pool.query(query, [syllabus_id, language_id, current_Level]);
+      const [rows] = await pool.query(query, [syllabus_id, language_id, current_Level ,topic_id]);
 
       if (rows.length === 0) {
           return res.status(404).json({ error: "No data found" });
@@ -262,12 +273,12 @@ export const getQuestionsNum = async (req, res) => {
 
 export const getTopicStatus = async (req, res) => {
   const { syllabus_id, language_id, topicName , student_id} = req.params;
-
+ 
   try {
     const studentIdQuery = `SELECT id FROM student WHERE user_id = ?`;
   
     const [student] = await pool.query(studentIdQuery, [student_id]);
-    const studentId = student[0].id;
+    const studentId = student[0]?.id;
       // Query the database to get the questionsNum
       const query = `
           SELECT completed
@@ -277,12 +288,51 @@ export const getTopicStatus = async (req, res) => {
       const [rows] = await pool.query(query, [studentId, syllabus_id, language_id, topicName]);
 
       if (rows.length === 0) {
-          return res.status(404).json({ error: "No data found" });
+        return res.status(200).json({ isTopicCompleted: false });
       }
 
       const completedStatus = rows[0].completed;
 
       return res.status(200).json({ isTopicCompleted: completedStatus === 1 ? true : false });
+  } catch (error) {
+      console.error("Error retrieving questionsNum:", error);
+      return res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+export const getLevelStatus = async (req, res) => {
+  const { syllabus_id, language_id, topic_name , level_id, student_id} = req.params;
+ 
+  try {
+    const studentIdQuery = `SELECT id FROM student WHERE user_id = ?`;
+  
+    const [student] = await pool.query(studentIdQuery, [student_id]);
+    const studentId = student[0]?.id;
+
+    const topicIdQuery = `SELECT id FROM topic_progress WHERE topicName = ?`;
+  
+    const [topic] = await pool.query(topicIdQuery, [topic_name]);
+    const topic_id = topic[0]?.id;
+
+    if(!topic_id){
+      return res.status(200).json({ isTopicCompleted: false , currQuestion :0 });
+    }
+      // Query the database to get the questionsNum
+      const query = `
+          SELECT completed , currQuestion
+          FROM level_progress
+          WHERE student_id = ? AND syllabus_id = ? AND language_id = ? AND topic_id= ? AND level_id= ?
+      `;
+      const [rows] = await pool.query(query, [studentId, syllabus_id, language_id, topic_id , level_id]);
+
+      if (rows.length === 0) {
+        return res.status(200).json({ isTopicCompleted: false , currQuestion :0 });
+      }
+
+      const completedStatus = rows[0].completed;
+      const currQues = rows[0].currQuestion;
+
+      return res.status(200).json({ isTopicCompleted: completedStatus === 1 ? true : false , currQuestion: completedStatus === 1 ? currQues : 0 });
   } catch (error) {
       console.error("Error retrieving questionsNum:", error);
       return res.status(500).json({ error: "Internal server error" });
@@ -363,7 +413,7 @@ export const updateLevelProgress = async (req, res, student_id) => {
         FROM topic_progress
         WHERE topicName = ? AND syllabus_id = ? AND language_id = ?
       `;
-      await pool.query(insertQuery, [student_id, syllabus_id, language_id, currentLevel + 1, 0, topic_name, syllabus_id, language_id]);
+      await pool.query(insertQuery, [student_id, syllabus_id, language_id, currentLevel + 1, 1, topic_name, syllabus_id, language_id]);
   
       return;
     }

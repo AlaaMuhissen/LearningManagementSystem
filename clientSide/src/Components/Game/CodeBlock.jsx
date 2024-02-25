@@ -15,29 +15,26 @@ export default function CodeBlock({id, value}) {
       }));
       return (
         <div
-          className='rounded-lg'
-          ref={drag}  
-          id={id}  
-          style={{ 
+          className='rounded-lg flex justify-center items-center text-center overflow-hidden overflow-x-auto'
+          ref={drag}
+          id={id}
+          style={{
             border: isDragging ? "4px solid #FF4CB7" : "0px",
-            minWidth : "70px",
-            minHeight: "70px",
             backgroundColor: "#fff",
             color: "#4E75FF",
-            display: "flex",
             fontWeight: '600',
-            justifyContent: "center",
-            alignItems: "center",
-            textAlign: "center",
-            overflow: "hidden",
-            textOverflow: "ellipsis",
-            wordWrap: "break-word",
             padding: "4px",
+            minWidth: value &&value.length <= 10 ? "70px" : "max-content",
+            minHeight: "70px",
+            width: "100%",
+            height: "auto", 
+            textWrap: "normal",
           }}
-        
         >
-          {value}
-          </div>
+      <span className="truncate text-sm">{value}</span>
+
+      </div>
+
       );
       
         };

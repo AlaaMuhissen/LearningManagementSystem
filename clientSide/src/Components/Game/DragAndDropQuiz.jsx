@@ -89,9 +89,9 @@ export default function DragAndDropQuiz({
       const newPoints = points + reward;
       
       updatePoints(newPoints);
-      if (qNum + 1 >= allQuestionNum) {
+      if (qNum >= allQuestionNum) {
         setTimeout(() => {
-          navigate(`/dashboard/${syllabusId}/${lan}/${topic}/levels/${level + 1}/challenges/${0}`);
+          navigate(`/dashboard/${syllabusId}/${lan}/${topic}/levels/${level + 1}/challenges/${1}`);
           window.location.reload();
        
         }, 2500);
@@ -119,15 +119,18 @@ export default function DragAndDropQuiz({
   };
 
   return (
-    <div className="flex">
-      {
-        parseInt(level) <= 2 ? (<DndProvider backend={HTML5Backend}>
-          <BlocksDiv availableBlocks={availableBlocks} />
-          <div className="flex flex-col gap-10 text-[#fff]">
-            <div className="flex justify-center">
-              <span className='font-bold'>{question}</span>
+    <div className="w-full flex flex-col-reverse md:flex-row-reverse  item-center justify-between gap-5 md:gap-12">
+    {
+      parseInt(level) <= 2 ? (
+        <DndProvider backend={HTML5Backend}>
+         <div className="max-w-screen-sm flex flex-col item-center gap-4 sm:gap-10 md:gap-10 lg:gap-8 xl:gap-10 text-[#fff] p-2 md:p-12">
+            <div className="w-full flex items-center justify-between ">
+            <span className="flex flex-wrap font-bold text-base sm:text-sm md:text-xl xl:text-2xl">{question}</span>
+
             </div>
-            <div className="flex items-center gap-4 justify-center">
+
+            <div className="max-w-screen-sm flex overflow-x-auto items-center gap-3 md:gap-4 ">
+
               {answer.map((drop, i) => (
                 <DragContainer
                   availableBlocks={availableBlocks}
@@ -143,21 +146,26 @@ export default function DragAndDropQuiz({
                   tempC={counter}
                 />
               ))}
-              <ToastContainer />
+        
+            </div>
+            <div className="flex justify-center">
               {parseInt(level) === 2 && <button onClick={handleRunButton}>Run</button>}
             </div>
             {
-              isRun && <div className="bg-white text-black rounded-lg shadow-md p-4 max-w-md mx-auto overflow-hidden">
-                <div dangerouslySetInnerHTML={{ __html: resultHtml }} />
-              </div>
+              isRun && (
+                <div className="bg-white text-black rounded-lg shadow-md p-4 max-w-md mx-auto overflow-hidden">
+                  <div dangerouslySetInnerHTML={{ __html: resultHtml }} />
+                </div>
+              )
             }
           </div>
-
-        </DndProvider>) :
-
-          (<CodeLevel />)
-      }
-
-    </div>
+          <BlocksDiv availableBlocks={availableBlocks} />
+        </DndProvider>
+      ) : (
+        <CodeLevel />
+      )
+    }
+  </div>
+  
   );
 }

@@ -66,33 +66,31 @@ export default function DragContainer({ availableBlocks, boardId, level, setUser
         setBlocks({
             ...pictureList,
             "boardId" :boardId
-          });
-       
+          }); 
     };
 
-   
     return (
         <>
-     
-          <div
-            className="rounded-lg"
+         <div className="rounded-lg"
             ref={drop}
             style={{
-              width: "70px",
-              height: "70px",
+              minHeight: "70px",
+              overflowX: "auto",
+              backgroundColor: "#fff",
+              minWidth: board.length === 0 ? "70px" : "fit-content",
               border:
                 board.length === 0
                   ? "1px solid #888"
-                  : (!equal && parseInt(level) === 1  ) || wrongBlocks.some((obj) => obj.boardId === boardId)
+                  : (!equal && parseInt(level) === 1) ||
+                    wrongBlocks.some((obj) => obj.boardId === boardId)
                   ? "4px solid red"
                   : "4px solid green",
             }}
             id={boardId}
           >
-             {<CodeBlock id={board[0]?.id} value={board[0]?.value}/>
-            }
+            {board[0] && <CodeBlock id={board[0]?.id} value={board[0]?.value} />}
           </div>
-      
+
         </>
       );
       
