@@ -4,6 +4,8 @@ import LevelProgress from './LevelProgress';
 
 const TopicProgress = ({ syllabus_id, studentId,topic, topicProgress, calculateTopicProgress }) => {
 
+  console.log(topicProgress);
+
    const [LevelProgressData, setLevelProgressData] = useState([]);
    const [LevelData, setLevelData] = useState([]);
      let sumCurrQuestion = 0;
@@ -55,12 +57,12 @@ const TopicProgress = ({ syllabus_id, studentId,topic, topicProgress, calculateT
     if (!levelProgress || !level) return 0;
     else{
 
-      sumCurrQuestion += parseInt(levelProgress?.currQuestion) +1;
+      sumCurrQuestion += parseInt(levelProgress?.currQuestion) ;
       totalQuestions += parseInt(level?.questionsNum);
       console.log(`level = ${levelNum}`);
       console.log(levelProgress);
-      console.log(`level progress = ${(levelProgress?.currQuestion +1) / level?.questionsNum}`);
-       return (levelProgress?.currQuestion +1 / level?.questionsNum ) * 100;
+      console.log(`level progress = ${(levelProgress?.currQuestion) / level?.questionsNum}`);
+       return (levelProgress?.currQuestion / level?.questionsNum ) * 100;
   }
 
 };
@@ -69,6 +71,7 @@ const TopicProgress = ({ syllabus_id, studentId,topic, topicProgress, calculateT
 
     return (
         <>
+    {topicProgress.find((topicPro) => topicPro.topicName ===topic.topic_name) &&   
       <div className="m-8">
         <h3 className="m-8">{topic.topic_name}</h3>
         <CircularProgressbarWithChildren
@@ -86,6 +89,7 @@ const TopicProgress = ({ syllabus_id, studentId,topic, topicProgress, calculateT
             ))}
         </CircularProgressbarWithChildren>
       </div>
+}
       </>
     );
   };

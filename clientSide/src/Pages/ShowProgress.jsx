@@ -3,12 +3,18 @@ import 'chart.js/auto';
 import { Chart } from 'react-chartjs-2';
 import { useAuth } from '../Components/Login/AuthContext';
 import TopicsPie from '../Components/TopicsPie';
+import TopicProgressPie from '../Components/TopicProgressPie';
+import LanguagePie from '../Components/LanguagePie';
 
 
 export const ShowProgress = () => {
+   
  return( 
  <>
-    <TopicsPie syllabus_id= {1} />
+    <LanguagePie syllabus_id= {1} language_id={1} />
+    <TopicProgressPie syllabus_id= {1} language_id={1} />
+    <TopicsPie syllabus_id= {1} language_id={1} />
+    
   </>
   )
 }

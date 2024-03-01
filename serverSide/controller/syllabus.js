@@ -34,3 +34,18 @@ export const getSyllabus = async (req, res) => {
       return res.status(500).json({ error: 'Internal server error' });
     }
   };
+
+  export const getLanguagesNameFromSyllabus = async (req, res) => {
+    const { syllabus_id} = req.params; 
+    try {
+      const query = `
+          SELECT lanName FROM syllabus_topic WHERE syllabus_id = ?
+      `;
+  
+      const [rows] = await pool.query(query, [syllabus_id]);
+      return res.status(200).json(rows);
+    } catch (error) {
+      console.error('Error fetching progress data:', error);
+      return res.status(500).json({ error: 'Internal server error' });
+    }
+  };

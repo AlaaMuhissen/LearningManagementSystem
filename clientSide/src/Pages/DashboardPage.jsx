@@ -1,4 +1,4 @@
-import React , {useEffect , useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import { styled, useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import MuiDrawer from '@mui/material/Drawer';
@@ -18,20 +18,22 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import MailIcon from '@mui/icons-material/Mail';
-import { PiExamFill , PiStudentFill} from "react-icons/pi";
-import { FaBookOpen ,FaPencilRuler } from "react-icons/fa";
+import { PiExamFill, PiStudentFill } from 'react-icons/pi';
+import { FaBookOpen, FaPencilRuler } from 'react-icons/fa';
 import FetchStudentTable from '../Components/CreateTable/FetchStudentTable';
 import FetchLessonTable from '../Components/CreateTable/FetchLessonTable';
 import FetchExerciseTable from '../Components/CreateTable/FetchExerciseTable';
 import FetchExamTable from '../Components/CreateTable/FetchExamTable';
 import { useAuth } from '../Components/Login/AuthContext';
-import TitlePage from './TitlePAge';
+
 import LogoutIcon from '@mui/icons-material/Logout';
 import { Button } from '@mui/material';
 import { usePoints } from '../Components/PointsContext';
 import { ShowProgress } from './ShowProgress';
+import LanguageTopicsPage from './LanguageTopicsPage';
+import LevelsPage from './LevelsPage';
+import ChallengePage from './ChallengePage';
+import HTMLPage from './HTMLPage';
 
 const drawerWidth = 240;
 
@@ -42,7 +44,7 @@ const openedMixin = (theme) => ({
     duration: theme.transitions.duration.enteringScreen,
   }),
   overflowX: 'hidden',
-  backgroundColor:  "#193255",
+  backgroundColor: '#193255',
   color: theme.palette.primary.contrastText,
 });
 
@@ -56,7 +58,7 @@ const closedMixin = (theme) => ({
   [theme.breakpoints.up('sm')]: {
     width: `calc(${theme.spacing(8)} + 1px)`,
   },
-  backgroundColor: "#193255",
+  backgroundColor: '#193255',
   color: theme.palette.primary.contrastText,
 });
 
@@ -66,7 +68,7 @@ const DrawerHeader = styled('div')(({ theme }) => ({
   justifyContent: 'flex-end',
   padding: theme.spacing(0, 1),
   ...theme.mixins.toolbar,
-  bgcolor :"#193255"
+  bgcolor: '#193255',
 }));
 
 const AppBar = styled(MuiAppBar, {
@@ -87,45 +89,41 @@ const AppBar = styled(MuiAppBar, {
   }),
 }));
 
-const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' })(
-  ({ theme, open }) => ({
-    width: drawerWidth,
-    flexShrink: 0,
-    whiteSpace: 'nowrap',
-    boxSizing: 'border-box',
-    bgcolor :"#193255",
-    ...(open && {
-      ...openedMixin(theme),
-      '& .MuiDrawer-paper': openedMixin(theme),
-      bgcolor :"#193255"
-    }),
-    ...(!open && {
-      ...closedMixin(theme),
-      '& .MuiDrawer-paper': closedMixin(theme),
-      bgcolor :"#193255"
-    }),
+const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' })(({ theme, open }) => ({
+  width: drawerWidth,
+  flexShrink: 0,
+  whiteSpace: 'nowrap',
+  boxSizing: 'border-box',
+  bgcolor: '#193255',
+  ...(open && {
+    ...openedMixin(theme),
+    '& .MuiDrawer-paper': openedMixin(theme),
+    bgcolor: '#193255',
   }),
-);
+  ...(!open && {
+    ...closedMixin(theme),
+    '& .MuiDrawer-paper': closedMixin(theme),
+    bgcolor: '#193255',
+  }),
+}));
 
 const TeacherContentOptions = [
-  { icon: <PiStudentFill fontSize={'24px'}/>, text: 'Student Data', component: <FetchStudentTable /> },
-  { icon: <FaBookOpen fontSize={'24px'}/>, text: 'Lessons Data', component: <FetchLessonTable /> },
-  { icon: <FaPencilRuler fontSize={'24px'}/>, text: 'Exercises Data', component: <FetchExerciseTable /> },
+  { icon: <PiStudentFill fontSize={'24px'} />, text: 'Student Data', component: <FetchStudentTable /> },
+  { icon: <FaBookOpen fontSize={'24px'} />, text: 'Lessons Data', component: <FetchLessonTable /> },
+  { icon: <FaPencilRuler fontSize={'24px'} />, text: 'Exercises Data', component: <FetchExerciseTable /> },
   { icon: <PiExamFill fontSize={'24px'} />, text: 'Exams Data', component: <FetchExamTable /> },
-
 ];
 
 const StudentContentOptions = [
-  { icon: <FaPencilRuler fontSize={'24px'}/>, text: 'My Exercises', component: <TitlePage /> },
-  { icon: <DonutLargeIcon fontSize={'24px'}/>, text: 'My progress', component: <ShowProgress /> },
-  { icon: <PersonOutlineIcon fontSize={'24px'}/>, text: 'Profile', component: <FetchLessonTable /> },
- 
+  { icon: <FaPencilRuler sx={{ fontSize: 40 }}/>, text: 'My Exercises', component: <HTMLPage/> },
+  { icon: <DonutLargeIcon sx={{ fontSize: 24 }} />, text: 'My progress', component: <ShowProgress /> },
+  { icon: <PersonOutlineIcon sx={{ fontSize: 24 }} />, text: 'Profile', component: <FetchLessonTable /> },
 ];
 
 export default function DashboardPage() {
   const theme = useTheme();
-  const { userData ,logout } = useAuth();
-  const [open, setOpen] = useState(true);
+  const { userData, logout } = useAuth();
+  const [open, setOpen] = useState(window.innerWidth > 600); 
   const [currentContent, setCurrentContent] = useState(null);
   let userPoints = 0;
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -145,19 +143,30 @@ export default function DashboardPage() {
 
   useEffect(() => {
     if (userRole === 'student') {
-      setCurrentContent(StudentContentOptions); 
-    
-      console.log(points);
-      // userPoints = points;
+      setCurrentContent(StudentContentOptions);
     } else {
-      setCurrentContent(TeacherContentOptions); 
+      setCurrentContent(TeacherContentOptions);
     }
   }, [userRole]);
 
   return (
-    <Box sx={{ display: 'flex', minHeight: '100vh', bgcolor: '#0d1d32', color: '#ffffff' }}>
-       <AppBar position="fixed" open={open}>
-        <Toolbar sx= {{ bgcolor :"#193255"}}>
+    <Box
+    sx={{
+      display: 'flex',
+      minHeight: '100vh',
+      bgcolor: '#0d1d32',
+      color: '#ffffff',
+      width:"100%",
+      
+      '@media (max-width: 600px)': { 
+        flexDirection: 'column', 
+       
+      }
+    }}
+  >
+    <CssBaseline />
+      <AppBar position="fixed" open={open}>
+        <Toolbar sx={{ bgcolor: '#193255' }}>
           <IconButton
             color="inherit"
             aria-label="open drawer"
@@ -173,16 +182,18 @@ export default function DashboardPage() {
           <Typography variant="h6" noWrap component="div">
             {userData?.username}
           </Typography>
-          {userData?.role === "student" && <Typography variant="h6" noWrap component="div">
-             ,Points: {userPoints}
-          </Typography>}
+          {userData?.role === 'student' && (
+            <Typography variant="h6" noWrap component="div">
+              , Points: {points}
+            </Typography>
+          )}
         </Toolbar>
       </AppBar>
       <Drawer variant="permanent" open={open}>
-      <DrawerHeader>
+        <DrawerHeader>
           <IconButton onClick={handleDrawerClose}>
             {theme.direction === 'rtl' ? (
-              <ChevronRightIcon sx={{ color: '#ffffff'}} />
+              <ChevronRightIcon sx={{ color: '#ffffff' }} />
             ) : (
               <ChevronLeftIcon sx={{ color: '#ffffff' }} />
             )}
@@ -190,45 +201,67 @@ export default function DashboardPage() {
         </DrawerHeader>
         <Divider />
         <List>
-          {currentContent && currentContent.map((option, index) => (
-            <ListItem key={option.text} disablePadding sx={{ display: 'block' }}>
-              <ListItemButton
-                onClick={() => handleContentChange(index)}
-                sx={{
-                  minHeight: 48,
-                  justifyContent: open ? 'initial' : 'center',
-                  px: 2.5,
-                  color: '#ffffff',
-                }}
-              >
-                <ListItemIcon
+          {currentContent &&
+            currentContent.map((option, index) => (
+              <ListItem key={option.text} disablePadding sx={{ display: 'block' }}>
+                <ListItemButton
+                  onClick={() => handleContentChange(index)}
                   sx={{
-                    minWidth: 0,
-                    mr: open ? 3 : 'auto',
-                    justifyContent: 'center',
+                    minHeight: 48,
+                    justifyContent: open ? 'initial' : 'center',
+                    px: 2.5,
                     color: '#ffffff',
                   }}
                 >
-                  {option.icon}
-                </ListItemIcon>
-                <ListItemText primary={option.text} sx={{ opacity: open ? 1 : 0 }} />
-              </ListItemButton>
-            </ListItem>
-          ))
-          }
-            <button onClick={()=> {logout()}}><LogoutIcon/>LogOut</button> 
+                  <ListItemIcon
+                    sx={{
+                      minWidth: 0,
+                      mr: open ? 3 : 'auto',
+                      justifyContent: 'center',
+                      color: '#ffffff',
+                    }}
+                  >
+                    {option.icon}
+                  </ListItemIcon>
+                  <ListItemText primary={option.text} sx={{ opacity: open ? 1 : 0 }} />
+                </ListItemButton>
+              </ListItem>
+            ))}
+          <button onClick={() => { logout() }}>
+            <LogoutIcon />LogOut
+          </button>
         </List>
       </Drawer>
-      <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+      <Box component="main" sx={{ p: 3 }}>
         <DrawerHeader />
-        <Box sx={{ margin: '20px' }}>
-          <Typography variant="h4" gutterBottom>
-            {currentContent?.[currentIndex]?.text}
+        <Box
+          sx={{
+            margin: '20px',
+            '@media (max-width: 600px)': {
+              margin: '10px',
+              marginLeft: '50px',
+              
+            },
+          }}
+        >
+         <Typography
+            variant="h4"
+            gutterBottom
+            sx={{
+              '@media (max-width: 600px)': {
+                fontSize: '2rem',
+              }
+            }}
+          >
+             {currentContent?.[currentIndex]?.text}
           </Typography>
           {currentContent?.[currentIndex]?.component}
         </Box>
       </Box>
     </Box>
-  );
+  )
 }
+
+
+
 

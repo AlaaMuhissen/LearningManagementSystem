@@ -8,7 +8,6 @@ export const usePoints = () => useContext(PointsContext);
 export const PointsProvider = ({ children }) => {
   const { userData } = useAuth();
   const userId = userData?.id;
-  console.log(userData);
   const [points, setPoints] = useState(0);
 
 
@@ -17,7 +16,8 @@ export const PointsProvider = ({ children }) => {
         try {
           const response = await fetch(`http://localhost:3001/api/students/getStudentPoints/${userId}`);
           const data = await response.json();
-          setPoints(data);
+          console.log(data);
+          setPoints(data.points);
         } catch (error) {
           console.error('Error during fetching points:', error);
         }
@@ -39,7 +39,7 @@ export const PointsProvider = ({ children }) => {
         })
       });
       const updatedData = await response.json();
-      setPoints(updatedData);
+      setPoints(updatedData.points);
     }
   } catch (error) {
     console.error('Error updating progress data:', error);
@@ -51,7 +51,7 @@ useEffect(() => {
   if(userId){
     fetchPoints();
   }
-}, []);
+}, [userId]);
 
 
   return (
