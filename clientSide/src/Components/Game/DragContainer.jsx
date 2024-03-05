@@ -71,13 +71,12 @@ export default function DragContainer({ availableBlocks, boardId, level, setUser
 
     return (
         <>
-         <div className="rounded-lg"
+      
+         <div className={`rounded-lg md:${board.length === 0 ? 'min-w-16' : 'min-w-max'}  md:min-h-16 lg:${board.length === 0 ? 'min-w-20' : 'min-w-max'}  lg:min-h-20 min-h-12 ${board.length === 0 ? 'min-w-12' : 'min-w-max'} `}
             ref={drop}
-            style={{
-              minHeight: "70px",
+            style={{          
               overflowX: "auto",
               backgroundColor: "#fff",
-              minWidth: board.length === 0 ? "70px" : "fit-content",
               border:
                 board.length === 0
                   ? "1px solid #888"

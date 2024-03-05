@@ -4,7 +4,7 @@ import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 
 
 const LevelProgress = ({ topicIdInProgress, level, topic, calculateLevelProgress }) => {
-    const colors = ["green", "yellow", "blue"];
+    const colors = ["#7FC7D9", "#86B6F6", "blue"];
     const widthPercentage = `${90 - (level * 20)}%`;
   
     return (

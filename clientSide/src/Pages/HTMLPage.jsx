@@ -6,12 +6,8 @@ function HTMLPage() {
 
     const [questions , setQuestions] = useState([]);
     const [languageId , setLanguageId] = useState(0);
-    const topic = 'Adding_Videos';
-    const syllabusId = 1;
-    const language = 'html';
-    const levelNum = 1;
-    const challengeNum = 1;
-    // const {challengeNum ,levelNum ,topic , language ,syllabusId}  = useParams();
+
+    const {challengeNum ,levelNum ,topic , language ,syllabusId}  = useParams();
 
     useEffect(()=>{
       fetch(`http://localhost:3001/api/syllabus/getLanguageId/${syllabusId}/${language}`)
@@ -25,6 +21,7 @@ function HTMLPage() {
       fetch(`http://localhost:3001/api/QA/getAllQuestionAndAnswer/${syllabusId}/${language}/${topic}`)
         .then(res => res.json())
         .then(data => {
+          console.log(data);
           setQuestions(data);
         })
         .catch(error => {
@@ -34,10 +31,11 @@ function HTMLPage() {
    
     // Get questions for the specified levelNumber
     const levelQuestions = questions[levelNum]; 
+    console.log(levelQuestions);
   
   return (
     <>
-    <div className='p-2 md:p-4 lg:p-12 xl:p-16'>
+    <div className='p-1 md:p-4 lg:p-4 '>
   
     <div>
       {(questions.length !== 0) && <DragAndDropQuiz 

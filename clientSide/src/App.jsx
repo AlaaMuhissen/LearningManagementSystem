@@ -17,6 +17,8 @@ import HTMLPage from './Pages/HTMLPage'
 import { PointsProvider } from './Components/PointsContext'
 import { LanguageStatusProvider } from './Components/LanguageStatusContext'
 import { ShowProgress } from './Pages/ShowProgress'
+import Layout from './Components/Layout/Layout'
+import TitlePage from './Pages/TitlePage'
 
 
 
@@ -34,16 +36,15 @@ function App() {
                     <LanguageStatusProvider>
           <Routes>
             <Route path='/' element={<LoginPage/>} />
-                <Route path='/dashboard' element={<DashboardPage />} />                
-  
-                  <Route path='/dashboard/:syllabusId/:language' element={<LanguageTopicsPage />} />
-                  <Route path='/dashboard/:syllabusId/:language/:topic/levels' element={<LevelsPage />} />
-                  <Route path='/dashboard/:syllabusId/:language/:topic/levels/:levelNum/challenges' element={<ChallengePage />} />
-                  <Route path='/dashboard/:syllabusId/:language/:topic/levels/:levelNum/challenges/:challengeNum' element={<HTMLPage/>} />
-                <Route path='/addStudent' element={<AddNewStudentForm />} />
+                <Route path='/dashboard' element={<Layout currentComponent={{component: <TitlePage/>}}/>} />                
+                  <Route path='/dashboard/:syllabusId/:language' element={<Layout currentComponent={{component: <LanguageTopicsPage />}}/>} />
+                  <Route path='/dashboard/:syllabusId/:language/:topic/levels' element={<Layout currentComponent={{component: <LevelsPage />}}/>}/>
+                  <Route path='/dashboard/:syllabusId/:language/:topic/levels/:levelNum/challenges' element={<Layout currentComponent={{component: <ChallengePage />}}/>} />
+                  <Route path='/dashboard/:syllabusId/:language/:topic/levels/:levelNum/challenges/:challengeNum' element={<Layout currentComponent={{component: <HTMLPage />}}/>} />
+                {/* <Route path='/addStudent' element={<AddNewStudentForm />} />
                 <Route path='/addLesson' element={<AddNewLessonForm />} />
                 <Route path='/addExam' element={<AddNewExamForm />} />
-                <Route path='/addExercise' element={<AddNewExerciseForm />} />   
+                <Route path='/addExercise' element={<AddNewExerciseForm />} />    */}
             </Routes>
             </LanguageStatusProvider>
             </PointsProvider>

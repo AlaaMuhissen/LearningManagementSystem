@@ -119,12 +119,12 @@ export default function DragAndDropQuiz({
   };
 
   return (
-    <div className="w-full flex flex-col-reverse md:flex-row-reverse  item-center justify-between gap-5 md:gap-12">
+    <div className="lg:h-full flex flex-col-reverse lg:flex-row-reverse  lg:item-center justify-between gap-6 lg:gap-0">
     {
       parseInt(level) <= 2 ? (
         <DndProvider backend={HTML5Backend}>
-         <div className="max-w-screen-sm flex flex-col item-center gap-4 sm:gap-10 md:gap-10 lg:gap-8 xl:gap-10 text-[#fff] p-2 md:p-12">
-            <div className="w-full flex items-center justify-between ">
+         <div className="max-w-screen-sm flex flex-col item-center justify-center gap-8 sm:gap-10 md:gap-10 lg:gap-8 xl:gap-10 text-[#fff] md:p-12 lg:p-1">
+            <div className="w-full flex items-center justify-between overflow-x-auto">
             <span className="flex flex-wrap font-bold text-base sm:text-sm md:text-xl xl:text-2xl">{question}</span>
 
             </div>
@@ -159,7 +159,9 @@ export default function DragAndDropQuiz({
               )
             }
           </div>
+          <div className='flex items-center justify-center w-full lg:w-1/3 '>
           <BlocksDiv availableBlocks={availableBlocks} />
+          </div>
         </DndProvider>
       ) : (
         <CodeLevel />

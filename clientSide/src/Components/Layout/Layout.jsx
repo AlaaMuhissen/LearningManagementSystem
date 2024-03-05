@@ -4,6 +4,7 @@ import Box from '@mui/material/Box';
 import CssBaseline from '@mui/material/CssBaseline';
 import { PiExamFill, PiStudentFill } from 'react-icons/pi';
 import { FaBookOpen, FaPencilRuler } from 'react-icons/fa';
+import MuiDrawer from '@mui/material/Drawer';
 import DonutLargeIcon from '@mui/icons-material/DonutLarge';
 import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
 import FetchStudentTable from '../CreateTable/FetchStudentTable';
@@ -50,7 +51,16 @@ const closedMixin = (theme) => ({
   color: theme.palette.primary.contrastText,
 });
 
-const Drawer = styled('div', { shouldForwardProp: (prop) => prop !== 'open' })(({ theme, open }) => ({
+const DrawerHeader = styled('div')(({ theme }) => ({
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'flex-end',
+  padding: theme.spacing(0, 1),
+  ...theme.mixins.toolbar,
+  bgcolor: '#193255',
+}));
+
+const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' })(({ theme, open }) => ({
   width: drawerWidth,
   flexShrink: 0,
   whiteSpace: 'nowrap',
@@ -58,10 +68,12 @@ const Drawer = styled('div', { shouldForwardProp: (prop) => prop !== 'open' })((
   bgcolor: '#193255',
   ...(open && {
     ...openedMixin(theme),
+    '& .MuiDrawer-paper': openedMixin(theme),
     bgcolor: '#193255',
   }),
   ...(!open && {
     ...closedMixin(theme),
+    '& .MuiDrawer-paper': closedMixin(theme),
     bgcolor: '#193255',
   }),
 }));
@@ -87,6 +99,7 @@ export default function Layout({ currentComponent }) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const userRole = userData ? userData.role : '';
   const { points } = usePoints();
+  const [currentCom, setCurrentCom] = useState(null);
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -97,15 +110,28 @@ export default function Layout({ currentComponent }) {
   };
 
   const handleContentChange = (index) => {
+    setCurrentCom(null);
     setCurrentIndex(index);
   };
 
+  useEffect(() => {
+    setCurrentCom(currentComponent);
+  }, [currentComponent]);
   useEffect(() => {
     setCurrentContent(userRole === 'student' ? StudentContentOptions : TeacherContentOptions);
   }, [userRole]);
 
   return (
-    <Box sx={{ display: 'flex', minHeight: '100vh', bgcolor: '#0d1d32', color: '#ffffff' }}>
+    <Box sx={{
+      display: 'flex',
+      minHeight: '100vh',
+      bgcolor: '#0d1d32',
+      color: '#ffffff',
+      width:"100%",
+      '@media (max-width: 600px)': { 
+        flexDirection: 'column',  
+      }
+    }}>
       <CssBaseline />
       <AppBarMU open={open} handleDrawerOpen={handleDrawerOpen} />
       <Drawer variant="permanent" open={open}>
@@ -120,9 +146,9 @@ export default function Layout({ currentComponent }) {
           />
         )}
       </Drawer>
-      <Box component="main" sx={{ flexGrow: 1, p: { xs: 1, sm: 2, md: 3 } }}>
-        <Header />
-        <DrawerContent currentComponent={currentComponent || currentContent[currentIndex]} />
+      <Box component="main" sx={{ p: 3 , width: '100%'  }}>
+      <DrawerHeader />
+     {currentContent && <DrawerContent currentComponent={currentCom || currentContent[currentIndex]} />}
       </Box>
     </Box>
   );

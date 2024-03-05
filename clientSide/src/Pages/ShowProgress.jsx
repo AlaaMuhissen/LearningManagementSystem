@@ -5,16 +5,54 @@ import { useAuth } from '../Components/Login/AuthContext';
 import TopicsPie from '../Components/TopicsPie';
 import TopicProgressPie from '../Components/TopicProgressPie';
 import LanguagePie from '../Components/LanguagePie';
+import { useSyllabus } from '../Components/SyllabusContext';
+import { FaSquare } from "react-icons/fa6";
 
 
 export const ShowProgress = () => {
-   
+  const syllabus = useSyllabus();
  return( 
  <>
-    <LanguagePie syllabus_id= {1} language_id={1} />
-    <TopicProgressPie syllabus_id= {1} language_id={1} />
-    <TopicsPie syllabus_id= {1} language_id={1} />
-    
+ <div className="flex flex-col md:flex-row p-4 gap-8">
+ <div className="flex flex-col gap-8 md:gap-10">
+  <div className="flex flex-col items-center justify-center border-2 border-pink-600 rounded-lg p-4 shadow-lg bg-gradient-to-br from-pink-500 to-pink-700 text-white md:min-w-96">
+  <h2 className="text-base md:text-xl font-bold mb-4">Language Pie Chart</h2>
+  <div className="flex flex-wrap w-full justify-center items-center">
+    <LanguagePie syllabus_id={1} language_id={1} />
+  </div>
+</div>
+
+<div className="flex flex-col items-center justify-center border-2 border-pink-600 rounded-lg p-4 shadow-lg backdrop-filter backdrop-blur-lg bg-opacity-50 bg-pink-700 text-white md:min-w-96">
+  <h2 className="text-base md:text-xl font-bold mb-4">Topics Pie Chart</h2>
+  <div className="flex w-full  overflow-x-auto md:overflow-x-hidden gap-16 ">
+    {syllabus?.map((lan, index) => (
+      <TopicProgressPie syllabus_id={1} language_id={lan.language_id} languageName={lan.lanName} key={index} />
+      
+    ))}
+  </div>
+</div>
+</div>
+<div className="h-full flex flex-col items-center justify-center border-2 border-pink-600 rounded-lg p-4 shadow-lg bg-gradient-to-br from-pink-500 to-pink-700 text-white">
+  <h2 className="text-base md:text-xl font-bold mb-4">Topics Pie Chart</h2>
+  <div className="flex items-center justify-center mb-4 md:mb-0 md:mr-8">
+      <div className="flex items-center justify-center gap-1">
+        <FaSquare className="text-green-500  text-xs" />
+        <span className="text-white text-xs">Level 1</span>
+        <FaSquare className="text-yellow-300 text-xs" />
+        <span className="text-white text-xs">Level 2</span>
+        <FaSquare className="text-gray-500 text-xs" />
+        <span className="text-white text-xs ">Level 3</span>
+      </div>
+    </div>
+  <div className="flex w-full h-full md:w-48 overflow-x-auto gap-7 mr-4 ml-4">
+    {syllabus?.map((lan, index) => (
+      <TopicsPie syllabus_id={1} language_id={lan.language_id} key={index}/>
+    ))}
+  </div>
+
+
+  </div>
+</div>
   </>
   )
 }

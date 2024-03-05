@@ -10,6 +10,7 @@ function TopicCard({ title, language ,syllabusId  }) {
   const [languageId , setLanguageId] = useState(0);
   const{userData} = useAuth();
   const studentId = userData?.id;
+  const newTitle = title.split("_").join(" ");
   const handleClick = () => {
     navigate(`/dashboard/${syllabusId}/${language}/${title}/levels`);
   };
@@ -47,8 +48,8 @@ function TopicCard({ title, language ,syllabusId  }) {
       {completed === true &&
         <FaChessQueen className="text-yellow-500 text-xl md:text-2xl lg:text-3xl" />}
       <div className="text-balance">
-        <div className="font-bold text-md text-white mb-2 md:text-lg" style={{ fontFamily: 'cursive' }}>
-          {title}
+        <div className="font-bold text-md text-wrap text-white mb-2 md:text-lg" style={{ fontFamily: 'cursive' }}>
+          {newTitle}
         </div>
       </div>
     </div>
