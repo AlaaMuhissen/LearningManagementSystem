@@ -5,7 +5,7 @@ import {  createUserWithEmailAndPassword } from "firebase/auth";
 /** Retrieves all students from the database */
 export const queryStudentTable = async (req, res) => {
   try {
-    const [results] = await pool.execute('SELECT * FROM Users WHERE role = "student"');
+    const [results] = await pool.execute('SELECT * FROM users WHERE role = "student"');
     res.json(results);
   } catch (error) {
     console.error('Error fetching students from database:', error);
@@ -21,7 +21,7 @@ export const getStudentByEmail = async (req, res) => {
   try {
 
     // Construct SQL query to fetch student by email
-    const [result] = await pool.execute(`SELECT * FROM Users WHERE email = ?`, 
+    const [result] = await pool.execute(`SELECT * FROM users WHERE email = ?`, 
     [email]
     );
     console.log(`result is ${result}`)
@@ -39,7 +39,7 @@ export const createNewStudent = async (req, res) => {
   try {
     // Insert new student data into the MySQL database
     const [result] = await pool.execute(`
-      INSERT INTO Users (username, phone, email, password, address)
+      INSERT INTO users (username, phone, email, password, address)
       VALUES (?, ?, ?, ?, ?)`, 
       [studentData.username, studentData.phone, studentData.email, studentData.password, studentData.address]
     );
@@ -137,7 +137,7 @@ export const deleteStudent = async (req, res) => {
       FROM student
       WHERE user_id = (
         SELECT id
-        FROM Users
+        FROM users
         WHERE email = ?
       )`,
       [email]
@@ -161,7 +161,7 @@ export const deleteStudent = async (req, res) => {
 
     // Delete the user from the users table
     const [deleteUserResult] = await pool.execute(`
-      DELETE FROM Users
+      DELETE FROM users
       WHERE id = ?`,
       [userId]
     );
