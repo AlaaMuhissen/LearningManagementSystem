@@ -4,6 +4,7 @@ import Divider from '@mui/material/Divider';
 import LogoutIcon from '@mui/icons-material/Logout';
 
 export default function Sidebar({ open, contentOptions, handleContentChange, logout }) {
+  
   return (
     <List>
       {contentOptions?.map((option, index) => (
@@ -32,7 +33,7 @@ export default function Sidebar({ open, contentOptions, handleContentChange, log
         </ListItem>
       ))}
       <ListItem>
-        <button onClick={logout}>
+        <button className='flex items-center' onClick={logout}>
           <ListItemIcon sx={{ color: '#ffffff' }}>
             <LogoutIcon />
           </ListItemIcon>

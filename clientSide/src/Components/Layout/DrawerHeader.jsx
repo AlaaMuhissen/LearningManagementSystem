@@ -1,4 +1,3 @@
-// DrawerHeader.js
 import React from 'react';
 import { styled, useTheme } from '@mui/material/styles';
 import IconButton from '@mui/material/IconButton';

@@ -5,8 +5,7 @@ import { useAuth } from '../Components/Login/AuthContext';
 import TopicProgress from './TopicProgress';
 import { FaSquare } from "react-icons/fa6";
 
-const TopicProgressPie = ({ syllabus_id  ,language_id}) => {
-
+const TopicProgressPie = ({ syllabus_id  ,language_id ,languageName}) => {
     const [TopicData, setTopicData] = useState([]);
     const [TopicProgressData, setTopicProgressData] = useState([]);
     const { userData } = useAuth();
@@ -40,7 +39,7 @@ const TopicProgressPie = ({ syllabus_id  ,language_id}) => {
     useEffect(() => {
       fetchTopicsData();
       fetchTopicProgressData();
-    }, [syllabus_id, language_id]);
+    }, [language_id]);
   
     useEffect(() => {
       if (TopicProgressData.length > 0 && TopicData.length > 0) {
@@ -53,21 +52,25 @@ const TopicProgressPie = ({ syllabus_id  ,language_id}) => {
   
     return (
       <>
-        {!TopicProgressData || TopicProgressData.length === 0 ? (
-          <div><h4>Start Learning to show your progress!!</h4></div>
-           ) : (
-          <div className="flex justify-center items-center w-56 h-56 md:flex-col md:items-start">
-            <h3>Html topics</h3>
-            <CircularProgressbar
-              value={percentage}
-              text={percentage === 0 ?  "You still didn't complete any topic"  :`${parseInt(percentage)}%`}
-              styles={buildStyles({
-                rotation: 0.5 + (1 - percentage / 100) / 2,
-                textSize: "6px"
-              })}
-            />
-          </div>
-        )}
+       {!TopicProgressData || TopicProgressData.length === 0 ? (
+  <div><h4>Start Learning to show your progress!!</h4></div>
+) : (
+  <div className="flex w-full h-full items-center md:flex-row md:items-start gap-4">
+  <div className="flex items-center overflow-x-auto w-32 h-32 ">
+    <CircularProgressbar
+      value={percentage}
+      strokeWidth={10}
+      text={percentage === 0 ? "You still didn't complete any topic" : `${parseInt(percentage)}%`}
+      styles={buildStyles({
+        rotation: 0.5 + (1 - percentage / 100) / 2,
+        textSize: "20px"
+      })}
+    />
+    </div>
+    <h4>  of {languageName} topics</h4>
+  </div>
+)}
+
       </>
     );
   };

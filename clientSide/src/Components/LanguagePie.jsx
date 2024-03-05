@@ -50,8 +50,7 @@ function LanguagePie({syllabus_id  ,language_id}) {
     }, [syllabus_id, language_id]);
   
     useEffect(() => {
-
-        LanguageData.forEach((item ,index) => {
+        LanguageData?.forEach((item ,index) => {
             let progress = 0;
                 if(LanguageProgressData[index] !== undefined){
                     const lanProgress = LanguageProgressData[index];
@@ -73,30 +72,49 @@ function LanguagePie({syllabus_id  ,language_id}) {
   return (
    
     <>
-    <div className='flex  w-96 h-96 justify-between'>
+   <div className='flex flex-wrap justify-center gap-4 '>
 
-      {pieData.map((lan, index) => ( 
-       <>
-        <h4 key={index}>{lan.name}</h4>
-       <ChangingProgressProvider values={[0, 20, 80]}>
-        {value => (
-          <CircularProgressbar
-          key={index}
+    {pieData?.map((lan, index) => ( 
+  <div key={index} className="w-20 h-20 text-center mb-8 relative">
+  <div className="absolute bottom-0 left-0 w-full">
+    <h4 className="text-base font-bold">{lan.name}</h4>
+  </div>
+  <div className="relative mx-auto ">
+    <ChangingProgressProvider values={[0, 20, 80]}>
+      {value => (
+        <CircularProgressbar
           value={lan.value}
-            text={`${lan.value}%`}
-            circleRatio={0.75}
-            styles={buildStyles({
-                rotation: 1 / 2 + 1 / 8,
-                strokeLinecap: "butt",
-                trailColor: "#eee"
-            })}
-            />
-            )}
-      </ChangingProgressProvider>
-      </>
-      ))}
-       
-      </div>
+          text={`${lan.value}%`}
+          circleRatio={0.75}
+          strokeWidth={8}
+          styles={buildStyles({
+            rotation: 1 / 2 + 1 / 8,
+            strokeLinecap: "butt",
+            trailColor: "#eee",
+            textColor: "#fff",
+            // pathColor: `rgba(255, 76, 183, ${value / 100})`,
+            trail: {
+              strokeWidth: 8,
+              strokeLinecap: "butt",
+              stroke: "#f4f4f4",
+            },
+            path: {
+              strokeWidth: 8,
+              strokeLinecap: "butt",
+            },
+            text: {
+              fontWeight: "bolder", 
+            },
+          })}
+        />
+      )}
+    </ChangingProgressProvider>
+  </div>
+</div>
+
+
+    ))}
+    </div>
     </>
   )
 }

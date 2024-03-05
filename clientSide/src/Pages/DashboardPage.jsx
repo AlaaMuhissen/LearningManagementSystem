@@ -123,7 +123,7 @@ const StudentContentOptions = [
 export default function DashboardPage() {
   const theme = useTheme();
   const { userData, logout } = useAuth();
-  const [open, setOpen] = useState(window.innerWidth > 600); 
+  const [open, setOpen] = useState(window.innerWidth > 800); 
   const [currentContent, setCurrentContent] = useState(null);
   let userPoints = 0;
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -157,7 +157,6 @@ export default function DashboardPage() {
       bgcolor: '#0d1d32',
       color: '#ffffff',
       width:"100%",
-      
       '@media (max-width: 600px)': { 
         flexDirection: 'column', 
        
@@ -232,12 +231,12 @@ export default function DashboardPage() {
           </button>
         </List>
       </Drawer>
-      <Box component="main" sx={{ p: 3 }}>
+      <Box component="main" sx={{ p: 3 , width: '100%'  }}>
         <DrawerHeader />
         <Box
           sx={{
             margin: '20px',
-            '@media (max-width: 600px)': {
+            '@media (max-width: 800px)': {
               margin: '10px',
               marginLeft: '50px',
               
@@ -248,7 +247,7 @@ export default function DashboardPage() {
             variant="h4"
             gutterBottom
             sx={{
-              '@media (max-width: 600px)': {
+              '@media (max-width: 800px)': {
                 fontSize: '2rem',
               }
             }}

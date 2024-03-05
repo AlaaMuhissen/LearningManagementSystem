@@ -3,7 +3,7 @@ import { CircularProgressbarWithChildren, CircularProgressbar, buildStyles } fro
 import 'react-circular-progressbar/dist/styles.css';
 import { useAuth } from '../Components/Login/AuthContext';
 import TopicProgress from './TopicProgress';
-import { FaSquare } from "react-icons/fa6";
+
 
 const TopicsPie = ({ syllabus_id  ,language_id}) => {
 
@@ -66,30 +66,28 @@ const TopicsPie = ({ syllabus_id  ,language_id}) => {
 
   return (
     <>
-    {!TopicProgressData || TopicProgressData.length === 0 ? (
-      <div><h4>Start Learning to show your progress!!</h4></div>
-    ) : (
-      <div className="flex justify-center items-center w-full h-full md:flex-col md:items-start">
-        <div>
-          <FaSquare className="text-green-500" />
-          <span>Level 1</span>
-          <FaSquare className="text-yellow-300" />
-          <span>Level 2</span>
-          {/* <FaSquare className="text-gray-500" />
-          <span>Level 3</span> */}
-        </div>
-        {TopicData?.map((topic) => (
-          <TopicProgress
-            key={topic.id}
-            syllabus_id={syllabus_id}
-            studentId={studentId}
-            topic={topic}
-            topicProgress={TopicProgressData}
-            calculateTopicProgress={calculateTopicProgress}
-          />
-        ))}
-      </div>
-    )}
+  {!TopicProgressData || TopicProgressData.length === 0 ? (
+  <div className="flex justify-center items-center w-full h-full">
+    <h4 className="text-lg font-bold text-white">Start Learning to show your progress!!</h4>
+  </div>
+) : (
+  <div className="flex flex-col items-center justify-center w-full h-full md:flex-row md:items-start">
+    
+    <div className='over-flow-x-auto w-40'>
+      {TopicData?.map((topic) => (
+        <TopicProgress
+          key={topic.id}
+          syllabus_id={syllabus_id}
+          studentId={studentId}
+          topic={topic}
+          topicProgress={TopicProgressData}
+          calculateTopicProgress={calculateTopicProgress}
+        />
+      ))}
+    </div>
+  </div>
+)}
+
     </>
   );
 };
