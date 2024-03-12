@@ -18,7 +18,7 @@ const SingleSelect = ({ selectedValue, onChange, availableOptions, label }) => {
         value={selectedValue}
         onChange={handleChange}
       >
-        {availableOptions.map((option) => (
+        {availableOptions?.map((option) => (
           <MenuItem key={option.id} value={option.id}>
             {option.description}
           </MenuItem>

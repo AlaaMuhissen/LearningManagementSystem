@@ -7,6 +7,7 @@ import TopicsRoutes from './routes/Student/topics.routes.js'
 import SyllabusRoutes from './routes/syllabus.routes.js'
 import QuestionAndAnswerRoutes from './routes/Student/questionAndAnswer.routes.js'
 import ProgressRoutes from './routes/Student/studentProgress.routes.js'
+import UserRoutes from './routes/user.routes.js'
 // import ExamsRoutes from './routes/exams.routes.js';
 // import ExercisesRoutes from './routes/exercises.routes.js';
 // import LessonsRoutes from './routes/lessons.routes.js';
@@ -23,6 +24,7 @@ app.use('/api/topics', TopicsRoutes);
 app.use('/api/syllabus', SyllabusRoutes);
 app.use('/api/QA', QuestionAndAnswerRoutes);
 app.use('/api/progress', ProgressRoutes);
+app.use('/api/user', UserRoutes);
 // app.use('/api/lessons', LessonsRoutes);
 // app.use('/api/exams', ExamsRoutes);
 // app.use('/api/exercises', ExercisesRoutes);

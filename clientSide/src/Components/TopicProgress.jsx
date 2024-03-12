@@ -78,7 +78,7 @@ const TopicProgress = ({ syllabus_id, studentId,topic, topicProgress, calculateT
             trailColor: "transparent"
             })}
         >
-            { [...Array(topic.levelNum).keys()].map((level, i) => (
+            { [...Array(topic.levelNum).keys()]?.map((level, i) => (
             <LevelProgress key={i} topicIdInProgress= {topic_id_in_progress} level={level} topic={topic} calculateLevelProgress={calculateLevelProgress} />
             ))}
         </CircularProgressbarWithChildren>

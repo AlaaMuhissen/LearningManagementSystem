@@ -6,8 +6,8 @@ function BlocksDiv({availableBlocks}) {
   return (
    <>
    <div className='w-full lg:w-4/5  mx-auto p-3 md:p-4 lg:p-8 relative overflow-hidden rounded-lg'>
-    <div className=" w-full mx-auto p-3 md:p-4 relative overflow-hidden  rounded-lg ">
-      <div className="w-full lg:h-full flex absolute inset-0 transform  items-center "
+    <div className=" w-full mx-auto p-3 md:p-4 relative overflow-hidden rounded-lg ">
+      <div className="lg:h-full w-full flex absolute inset-0 transform  items-center "
         style={{
           backgroundImage: `url(${img})`,
           backgroundPosition: 'right',
@@ -16,8 +16,8 @@ function BlocksDiv({availableBlocks}) {
         }}
       /> 
         <div className="relative z-10 flex justify-center items-center">
-          <div className=" overflow-y-scroll flex flex-row overflow-x-auto lg:flex-col items-center gap-4 lg:gap-4 lg:max-h-screen ">
-          {availableBlocks.map((code, i) => (
+          <div className="lg:gap-4 lg:max-h-screen lg:flex-col overflow-y-scroll flex flex-row overflow-x-auto  items-center gap-4  ">
+          {availableBlocks?.map((code, i) => (
             <CodeBlock id={code.id} value={code.value} key={i} />
           ))}
           </div>

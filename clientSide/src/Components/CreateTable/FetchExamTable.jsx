@@ -106,7 +106,7 @@ function FetchExamTable() {
   useEffect(() => {
     if (rows.length > 0) {
       const columnNames = Object.keys(rows[0]);
-      const newColumns = columnNames.map((columnName) => ({
+      const newColumns = columnNames?.map((columnName) => ({
         id: columnName,
         label: columnName,
         minWidth: 70,

@@ -21,7 +21,6 @@ function HTMLPage() {
       fetch(`http://localhost:3001/api/QA/getAllQuestionAndAnswer/${syllabusId}/${language}/${topic}`)
         .then(res => res.json())
         .then(data => {
-          console.log(data);
           setQuestions(data);
         })
         .catch(error => {
@@ -31,7 +30,6 @@ function HTMLPage() {
    
     // Get questions for the specified levelNumber
     const levelQuestions = questions[levelNum]; 
-    console.log(levelQuestions);
   
   return (
     <>
@@ -40,16 +38,16 @@ function HTMLPage() {
     <div>
       {(questions.length !== 0) && <DragAndDropQuiz 
         syllabusId= {parseInt(syllabusId)}
-        question= {levelQuestions[(challengeNum-1)].question_text}
-        availableBlocks={levelQuestions[(challengeNum -1)].answer_values}
-        answer={levelQuestions[(challengeNum -1)].answer_values}
+        question= {levelQuestions[(challengeNum-1)]?.question_text}
+        availableBlocks={levelQuestions[(challengeNum -1)]?.answer_values}
+        answer={levelQuestions[(challengeNum -1)]?.answer_values}
         level={parseInt(levelNum)}
         qNum = {parseInt((challengeNum))}
         lan = {language}
         lanId = {parseInt(languageId)}
         topic = {topic}
         allQuestionNum = {questions[levelNum].length}
-        reward ={levelQuestions[(challengeNum -1)].reward}
+        reward ={levelQuestions[(challengeNum -1)]?.reward}
         />
       }
 

@@ -20,8 +20,6 @@ function ChallengeCard({questionNum}) {
       if (topicData) {
         const response = await fetch(`http://localhost:3001/api/progress/getQuestionNum/${syllabusId}/${topicData?.language_id}/${topicData?.id}/${levelNum}`);
         const data = await response.json();
-        console.log(questionNum)
-        console.log(data)
         setTotalQuestion(data.questionsNum);
         if(questionNum <= data.questionsNum){
           setStatus(true);
@@ -50,7 +48,7 @@ function ChallengeCard({questionNum}) {
 
   <>
     <div
-      className={`w-full md:w-1/2 lg:w-1/3 xl:w-1/4 max-w-48 mx-auto bg-white rounded-md overflow-hidden shadow-lg transform transition-transform duration-300 hover:scale-105 p-3 md:p-5 h-full max-h-40 mb-5 cursor-pointer ${status ? 'opacity-50' : 'opacity-100'} `}
+      className={`w-full md:w-1/2 lg:w-1/3 xl:w-1/4 max-w-48 mx-auto bg-white rounded-md overflow-hidden shadow-lg transform transition-transform duration-300 hover:scale-105 p-3 md:p-5 h-full max-h-40 mb-5 cursor-pointer ${status ? 'opacity-50 pointer-events-none' : 'opacity-100'} `}
       onClick={handleClick}
     >
       <div className="mt-4 md:mt-3 flex justify-center items-center">

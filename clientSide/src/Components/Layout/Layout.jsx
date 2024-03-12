@@ -21,6 +21,7 @@ import DrawerContent from './DrawerContent';
 import { useAuth } from '../Login/AuthContext';
 import { usePoints } from '../PointsContext';
 import TitlePage from '../../Pages/TitlePage';
+import UserProfile from '../../Pages/UserProfile';
 
 
 
@@ -88,7 +89,7 @@ const TeacherContentOptions = [
 const StudentContentOptions = [
   { icon: <FaPencilRuler sx={{ fontSize: 40 }}/>, text: 'My Exercises', component: <TitlePage/> },
   { icon: <DonutLargeIcon sx={{ fontSize: 24 }} />, text: 'My progress', component: <ShowProgress/> }, 
-  { icon: <PersonOutlineIcon sx={{ fontSize: 24 }} />, text: 'Profile', component: <FetchLessonTable /> },
+  { icon: <PersonOutlineIcon sx={{ fontSize: 24 }} />, text: 'Profile', component: <UserProfile /> },
 ];
 
 export default function Layout({ currentComponent }) {

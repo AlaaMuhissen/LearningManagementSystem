@@ -63,7 +63,7 @@ const getExerciseNameById = async (id) =>{
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
             <TableRow>
-              {columns.map((column) => (
+              {columns?.map((column) => (
                 <TableCell
                   key={column.id}
                   align={column.align}
@@ -85,10 +85,10 @@ const getExerciseNameById = async (id) =>{
           <TableBody>
   {rows
     ?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-    .map((row, i) => {
+    ?.map((row, i) => {
       return (
         <TableRow hover role="checkbox" tabIndex={-1} key={row.id}>
-          {columns.map((column) => {
+          {columns?.map((column) => {
             const value =
               column.id !== 'id' ? row[column.id] : i + 1;
 

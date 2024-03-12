@@ -73,7 +73,7 @@ function LanguagePie({syllabus_id  ,language_id}) {
    
     <>
    <div className='flex flex-wrap justify-center gap-4 '>
-
+{console.log(pieData)}
     {pieData?.map((lan, index) => ( 
   <div key={index} className="w-20 h-20 text-center mb-8 relative">
   <div className="absolute bottom-0 left-0 w-full">
