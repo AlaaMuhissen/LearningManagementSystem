@@ -17,7 +17,7 @@ export default function LoginWithEmail() {
       const user = userCredential.user;
       console.log(user);
       setIsAuthenticated(true);
-     fetchUserRole(user.email); // Fetch user role after authentication
+     fetchUserRole(user.email); 
     } catch (error) {
       console.log(error.message);
     }
@@ -47,39 +47,40 @@ const fetchUserRole = async (email) => {
 
   return (
     <>
-      <form className='isolate aspect-video rounded-xl bg-white/60 shadow-lg ring-1 ring-black/10 h-90 w-30 flex flex-col gap-4 items-center p-11'>
-        <div className='relative'>
-          <input
-            type="url"
-            placeholder='Email'
-            className="h-14 p-2 border border-gray-500 rounded w-80"
-            required
-            onChange={(e) => setEmail(e.target.value)}
-          />
-        </div>
-        <div className='relative'>
-          <input
-            type="password"
-            placeholder="*******"
-            className="h-14 p-2 border border-gray-500 rounded w-80"
-            required
-            onChange={(e) => setPassword(e.target.value)}
-          />
-        </div>
-        <button
-          className="bg-[#5698f0] text-[#0d1d32] font-bold p-2 rounded-md w-24"
-          onClick={signIn}
-        >
-          Login
-        </button>
+    <form className='isolate aspect-video rounded-xl bg-white/60 shadow-lg ring-1 ring-black/10 md:h-90 w-full md:w-96 flex flex-col gap-4 items-center p-11'>
+  <div className='relative'>
+    <input
+      type="url"
+      placeholder='Email'
+      className="h-14 p-2 border border-gray-500 rounded w-full md:w-80"
+      required
+      onChange={(e) => setEmail(e.target.value)}
+    />
+  </div>
+  <div className='relative'>
+    <input
+      type="password"
+      placeholder="*******"
+      className="h-14 p-2 border border-gray-500 rounded w-full md:w-80"
+      required
+      onChange={(e) => setPassword(e.target.value)}
+    />
+  </div>
+  <button
+    className="bg-[#5698f0] text-[#0d1d32] font-bold p-2 rounded-md w-full md:w-24"
+    onClick={signIn}
+  >
+    Login
+  </button>
 
-        <p className="text-sm font-bold text-[#0d1d32]">
-          Don't have an account? <a href="#">Sign up</a>
-        </p>
-        <div className="flex justify-between items-center">
-          <LoginWithGmail />
-        </div>
-      </form>
+  <p className="text-sm font-bold text-[#0d1d32]">
+    Don't have an account? <a href="#">Sign up</a>
+  </p>
+  <div className="flex justify-between items-center">
+    <LoginWithGmail />
+  </div>
+</form>
+
     </>
   );
 }

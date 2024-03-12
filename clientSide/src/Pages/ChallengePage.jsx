@@ -17,15 +17,14 @@ function ChallengePage() {
           console.error('Error during fetching topics:', error);
         });
   },[])
-  
-    // Get questions for the specified levelNumber
+
     const levelQuestions = questions&&questions[levelNum]; 
 
     return (
         <>
             <div className='p-4 md:p-8 lg:p-12 xl:p-16'>
                 <HtmlTitle title={"Embark on Your Daily Adventure, Little Explorer! "}/>
-                <div className='flex flex-wrap '>
+                <div className='flex flex-wrap gap-3'>
                 {(levelQuestions?.length === 0) || !levelQuestions ? (
                     <div className="w-full text-center text-gray-600 mt-4">No challenges yet</div>
                   ) : (

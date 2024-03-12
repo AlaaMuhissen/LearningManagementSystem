@@ -14,6 +14,9 @@ import wahSound from '/sounds/wah-wah-sad-trombone-6347.mp3';
 import CodeLevel from './CodeLevel';
 import { useAuth } from '../Login/AuthContext';
 import { usePoints } from '../PointsContext';
+import Phone from './Phone';
+
+
 
 export default function DragAndDropQuiz({
   syllabusId,
@@ -41,8 +44,9 @@ export default function DragAndDropQuiz({
   const [playWah] = useSound(wahSound);
   const [resultHtml, setResultHtml] = useState('');
 
-  
 
+  
+  
   useEffect(() => {
     if (correctAnswer) { 
       fetch(`http://localhost:3001/api/progress/updateProgress`, {
@@ -101,7 +105,7 @@ export default function DragAndDropQuiz({
           window.location.reload();
         }, 2500);
       }
-      setResultHtml(userAnswer.map((block) => block.value).join(''));
+      setResultHtml(userAnswer?.map((block) => block.value).join(''));
     } else {
       console.log('Try Again');
       console.log(userAnswer.length);
@@ -119,19 +123,18 @@ export default function DragAndDropQuiz({
   };
 
   return (
+    <>
     <div className="lg:h-full flex flex-col-reverse lg:flex-row-reverse  lg:item-center justify-between gap-6 lg:gap-0">
     {
       parseInt(level) <= 2 ? (
         <DndProvider backend={HTML5Backend}>
-         <div className="max-w-screen-sm flex flex-col item-center justify-center gap-8 sm:gap-10 md:gap-10 lg:gap-8 xl:gap-10 text-[#fff] md:p-12 lg:p-1">
+         <div className="max-w-screen-sm flex flex-col item-center justify-center gap-8 sm:gap-10 md:gap-10 lg:gap-8 text-[#fff] md:p-12 lg:p-1">
             <div className="w-full flex items-center justify-between overflow-x-auto">
             <span className="flex flex-wrap font-bold text-base sm:text-sm md:text-xl xl:text-2xl">{question}</span>
-
             </div>
-
             <div className="max-w-screen-sm flex overflow-x-auto items-center gap-3 md:gap-4 ">
 
-              {answer.map((drop, i) => (
+              {answer?.map((drop, i) => (
                 <DragContainer
                   availableBlocks={availableBlocks}
                   key={i}
@@ -151,23 +154,26 @@ export default function DragAndDropQuiz({
             <div className="flex justify-center">
               {parseInt(level) === 2 && <button onClick={handleRunButton}>Run</button>}
             </div>
-            {
-              isRun && (
-                <div className="bg-white text-black rounded-lg shadow-md p-4 max-w-md mx-auto overflow-hidden">
-                  <div dangerouslySetInnerHTML={{ __html: resultHtml }} />
-                </div>
-              )
-            }
+          
+          
+          
           </div>
-          <div className='flex items-center justify-center w-full lg:w-1/3 '>
+          <div className='lg:w-1/3 flex items-center justify-center w-full  '>
           <BlocksDiv availableBlocks={availableBlocks} />
           </div>
+          
         </DndProvider>
+        
       ) : (
         <CodeLevel />
       )
     }
+   
   </div>
+   {
+    isRun && <Phone resultHtml = {resultHtml} />
   
+  }
+  </>
   );
 }

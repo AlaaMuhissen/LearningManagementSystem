@@ -201,7 +201,7 @@ export default function DashboardPage() {
         <Divider />
         <List>
           {currentContent &&
-            currentContent.map((option, index) => (
+            currentContent?.map((option, index) => (
               <ListItem key={option.text} disablePadding sx={{ display: 'block' }}>
                 <ListItemButton
                   onClick={() => handleContentChange(index)}

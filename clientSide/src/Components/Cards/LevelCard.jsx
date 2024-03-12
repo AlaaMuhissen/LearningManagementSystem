@@ -50,12 +50,12 @@ function LevelCard({syllabusId ,language,topic,levelNumber }) {
   useEffect(() => {
         fetchLevelsProgressData();
         fetchQuestionNum();
-   
-  },[syllabusId]);
+  },[studentId,topicData]);
 
 return (
   <>
-    <div className={`w-full md:w-1/2  max-w-xs md:max-w-md lg:max-w-lg xl:max-w-xl mx-auto bg-white rounded-md overflow-hidden shadow-lg transform transition-transform duration-300 hover:scale-105 h-full max-h-40 mb-5 cursor-pointer ${(!levelStatus && levelNumber !== 1) ? 'opacity-50' : 'opacity-100'}`}
+
+    <div className={`w-full md:w-1/2  max-w-xs md:max-w-md lg:max-w-lg xl:max-w-xl mx-auto bg-white rounded-md overflow-hidden shadow-lg transform transition-transform duration-300 hover:scale-105 h-full max-h-40 mb-5 cursor-pointer ${(!levelStatus && levelNumber !== 1) ? 'opacity-50 pointer-events-none' : 'opacity-100'}`}
       onClick={handleClick}
     >
       <div className="mt-2 md:mt-4">

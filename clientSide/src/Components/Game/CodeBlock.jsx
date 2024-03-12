@@ -30,7 +30,7 @@ export default function CodeBlock({id, value}) {
         }}
       >
       <div className='flex justify-start items-center'>
-      <span className="truncate text-xs lg:text-lg">{value}</span>
+      <span className="lg:text-lg truncate text-xs ">{value}</span>
         </div>      
       </div>
 

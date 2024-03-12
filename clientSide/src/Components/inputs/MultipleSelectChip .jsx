@@ -24,7 +24,7 @@ const MultipleSelectChip = ({ selectedExercises, onChange, availableExercises })
         input={<OutlinedInput id="select-multiple-chip" label="Exercises" />}
         renderValue={(selected) => (
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-            {selected.map((value) => {
+            {selected?.map((value) => {
               const selectedExercise = availableExercises.find((exercise) => exercise.id === value);
               return (
                 <Chip key={value} label={selectedExercise ? selectedExercise.description : ''} />
@@ -33,7 +33,7 @@ const MultipleSelectChip = ({ selectedExercises, onChange, availableExercises })
           </div>
         )}
       >
-        {availableExercises.map((exercise) => (
+        {availableExercises?.map((exercise) => (
           <MenuItem key={exercise.id} value={exercise.id}>
             {exercise.description}
           </MenuItem>
