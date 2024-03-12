@@ -3,28 +3,26 @@ import pool from '../../config/db.js';
 
 export const insertStudentProgress = async (req, res) => {
     const { studentId , syllabus_id } = req.params;
-    console.log(studentId);
-    console.log(syllabus_id);
   
     try {
   
       const [topicsRows] = await pool.query(`SELECT * FROM syllabus_topic
       WHERE syllabus_id = ?`, [syllabus_id]);
       console.log(topicsRows);
-  
+      const randomId = Math.floor(Math.random() * 1000000);
  
       for (const row of topicsRows) {
         const { id: id, language_id } = row;
       
         const studentProgressQuery = `
-        INSERT INTO student_progress (student_id, syllabus_id, language_id, started, finished)
-        VALUES (?, ?, ?, ?, ?)
+        INSERT INTO student_progress (id,student_id, syllabus_id, language_id, started, finished)
+        VALUES (?,?, ?, ?, ?, ?)
         `;
-        const studentProgressData = [studentId,syllabus_id, language_id, 0, 0];
+        const studentProgressData = [randomId,studentId,syllabus_id, language_id, 0, 0];
         await pool.query(studentProgressQuery, studentProgressData);
               }
           
-      console.log('Transaction committed successfully');
+
       res.status(200).json({ message: 'Data inserted successfully' });
     } catch (error) {
       console.error('Error inserting student progress:', error);
@@ -35,49 +33,46 @@ export const insertStudentProgress = async (req, res) => {
 
 export const editStudentProgress = async (req, res) => {
   const { studentId , syllabus_id } = req.params;
-  console.log(studentId);
-  console.log(syllabus_id);
-
+ 
   try {
 
     const [topicsRows] = await pool.query(`SELECT * FROM topics
     WHERE syllabus_id = ?`, [syllabus_id]);
-    console.log(topicsRows);
-
+    const randomId = Math.floor(Math.random() * 1000000);
     for (const row of topicsRows) {
       const { id: topicId, topic_name, levelNum, lanName } = row;
 
       const studentProgressQuery = `
-        INSERT INTO student_progress (student_id, level_id, completed, current_question, syllabus_id)
-        VALUES (?, ?, ?, ?, ?)
+        INSERT INTO student_progress (id,student_id, level_id, completed, current_question, syllabus_id)
+        VALUES (?,?, ?, ?, ?, ?)
       `;
-      const studentProgressData = [studentId, 1, 0, 0, syllabus_id];
+      const studentProgressData = [randomId, studentId, 1, 0, 0, syllabus_id];
       await pool.query(studentProgressQuery, studentProgressData);
  
     
       const languageProgressQuery = `
-        INSERT INTO language_progress (name, student_id, syllabus_id)
-        VALUES (?,?, ?)
+        INSERT INTO language_progress (id,name, student_id, syllabus_id)
+        VALUES (?,?,?, ?)
       `;
-      await pool.query(languageProgressQuery, [lanName, studentId, syllabus_id]);
+      await pool.query(languageProgressQuery, [(randomId+1),lanName, studentId, syllabus_id]);
 
+    
       const topicProgressQuery = `
-        INSERT INTO topic_progress (student_id, syllabus_id, name, topicSyllabus_id)
-        VALUES (?, ?, ?, ?)
+        INSERT INTO topic_progress (id,student_id, syllabus_id, name, topicSyllabus_id)
+        VALUES (?,?, ?, ?, ?)
       `;
-      const topicProgressData = [studentId, syllabus_id, topic_name, topicId];
+      const topicProgressData = [(randomId+2),studentId, syllabus_id, topic_name, topicId];
       await pool.query(topicProgressQuery, topicProgressData);
 
-     
       const levelProgressQuery = `
-        INSERT INTO level_progress (name,student_id, syllabus_id,  levelSyllabus_id, completed, current_question)
+        INSERT INTO level_progress (id,name,student_id, syllabus_id,  levelSyllabus_id, completed, current_question)
         VALUES (?, ?, ?, ?, ?, ?)
       `;
-      const levelProgressData = ["level1", studentId, syllabus_id, levelNum, 0, 0];
+      const levelProgressData = [(randomId+3),"level1", studentId, syllabus_id, levelNum, 0, 0];
       await pool.query(levelProgressQuery, levelProgressData);
     }
 
-    console.log('Transaction committed successfully');
+ 
     res.status(200).json({ message: 'Data inserted successfully' });
   } catch (error) {
     console.error('Error inserting student progress:', error);
@@ -113,12 +108,13 @@ export const getLanguageStatus = async (req, res) => {
   
     const [student] = await pool.query(studentIdQuery, [student_id]);
     const studentId = student[0].id;
+   
       const query = `
           SELECT  started, finished  FROM student_progress
           WHERE student_id = ? AND language_id = ? AND syllabus_id = ?
       `;
-      
       const [status] = await pool.query(query, [studentId, language_id ,syllabus_id]);
+     
       
       res.status(200).json(status);
   } catch (error) {
@@ -148,6 +144,33 @@ export const getTopicProgress = async (req, res) => {
       res.status(500).json({ error: 'Internal server error' });
   }
 };
+export const ifThereIsStatus = async (req, res) => {
+  const { student_id ,syllabus_id } = req.params; 
+  try {
+    const studentIdQuery = `SELECT id FROM student WHERE user_id = ?`;
+  
+    const [student] = await pool.query(studentIdQuery, [student_id]);
+    const studentId = student[0].id;
+
+      const query = `
+          SELECT  *  FROM language_progress
+          WHERE student_id = ? AND syllabus_id = ?
+      `;
+      
+      const [languageProgress]= await pool.query(query, [studentId, syllabus_id]);
+      const isThereProgress = languageProgress.some((lan)=> lan.started === 1);
+      if(isThereProgress){
+        res.status(200).json(true);
+      }
+      else{
+        res.status(200).json(false);
+      }
+      
+  } catch (error) {
+      console.error('Error Fetching progress data:', error);
+      res.status(500).json({ error: 'Internal server error' });
+  }
+};
 export const checkAndUpdateProgress = async(req, res) => {
   const { student_id, syllabus_id, language_id, topic_name ,level, questionNum} = req.body;
   
@@ -156,28 +179,29 @@ export const checkAndUpdateProgress = async(req, res) => {
   
     const [student] = await pool.query(studentIdQuery, [student_id]);
     const studentId = student[0].id;
-    console.log(studentId)
+ 
     const studentProgressQuery = `SELECT * FROM student_progress WHERE student_id = ? AND syllabus_id = ? AND language_id = ?`;
     const [studentProgressResults] = await pool.query(studentProgressQuery, [studentId, syllabus_id, language_id]);
 
     if (studentProgressResults.length !== 0) {
-      // If row found, update the started column
+     
       const updateStudentProgressQuery = `UPDATE student_progress SET started = 1 WHERE student_id = ? AND syllabus_id = ? AND language_id = ?`;
       await pool.query(updateStudentProgressQuery, [studentId, syllabus_id, language_id]);
     } else {
-      const insertStudentProgressQuery = `INSERT INTO student_progress (student_id, syllabus_id, language_id, started, finished) VALUES (?, ?, ?, 1, 0)`;
-      await pool.query(insertStudentProgressQuery, [studentId, syllabus_id, language_id]);
+      const randomId = Math.floor(Math.random() * 1000000);
+      const insertStudentProgressQuery = `INSERT INTO student_progress (id,student_id, syllabus_id, language_id, started, finished) VALUES (?, ?, ?, ?, 1, 0)`;
+      await pool.query(insertStudentProgressQuery, [randomId, studentId, syllabus_id, language_id]);
     }
 
     const topicProgressQuery = `SELECT id FROM topic_progress WHERE student_id = ? AND syllabus_id = ? AND language_id = ? AND topicName = ?`;
   
     const [topicResults] = await pool.query(topicProgressQuery, [studentId, syllabus_id, language_id, topic_name]);
-    console.log(topicResults)
-   
+ 
+    const randomId = Math.floor(Math.random() * 1000000);
         if (topicResults.length === 0) {
-            const insertTopicProgressQuery = `INSERT INTO topic_progress (student_id, syllabus_id, language_id, topicName) VALUES (?, ?, ?, ?)`;
-            const [topicProgress] = await pool.query(insertTopicProgressQuery, [studentId, syllabus_id, language_id, topic_name]);
-            console.log(topicProgress.insertId);
+            const insertTopicProgressQuery = `INSERT INTO topic_progress (id, student_id, syllabus_id, language_id, topicName) VALUES (?,?, ?, ?, ?)`;
+            const [topicProgress] = await pool.query(insertTopicProgressQuery, [randomId, studentId, syllabus_id, language_id, topic_name]);
+            
             checkOrUpdateLevelProgress(req, res,topicProgress.insertId ,studentId);
          }
          else {
@@ -194,7 +218,6 @@ const checkOrUpdateLevelProgress = async (req, res, topic_id, student_id) => {
   const { syllabus_id, language_id, level, questionNum } = req.body;
 
   try {
-    // Check if there is a row with the same student_id, syllabus_id, language_id, and topic_id in level_progress table
     const levelProgressQuery = `
       SELECT id, currQuestion 
       FROM level_progress 
@@ -210,36 +233,42 @@ const checkOrUpdateLevelProgress = async (req, res, topic_id, student_id) => {
       const { id, currQuestion } = levelResults[0];
       const updatedCurrQuestion = currQuestion + 1;
 
-      // Update the completed boolean to 1 if all questions in the level are completed
-      console.log(`updatedQuestion is ${updatedCurrQuestion} and the question number ${questionNum}`)
-      if (updatedCurrQuestion === questionNum) {
-        const updateLevelStatusQuery = `UPDATE level_progress SET completed = 1, currQuestion = ? WHERE id = ?`;
+      if (updatedCurrQuestion === questionNum || updatedCurrQuestion > questionNum) {
+        const updateLevelStatusQuery = `
+          UPDATE level_progress 
+          SET completed = 1, currQuestion = ? 
+          WHERE id = ?
+        `;
         await pool.query(updateLevelStatusQuery, [questionNum, id]);
-        res.status(200).json(updateLevelStatusQuery);
+      } else {
+        const updateLevelProgressQuery = `
+          UPDATE level_progress 
+          SET currQuestion = ? 
+          WHERE id = ?
+        `;
+        await pool.query(updateLevelProgressQuery, [updatedCurrQuestion, id]);
       }
-       else{
-         // Update the currQuestion value
-         const updateLevelProgressQuery = `UPDATE level_progress SET currQuestion = ? WHERE id = ?`;
-         const [updateRow] = await pool.query(updateLevelProgressQuery, [updatedCurrQuestion, id]);
-         res.status(200).json(updateRow);
-        }
-    } else {
 
-      // If no row found, create one
+      res.status(200).json({ message: 'Level progress updated successfully' });
+    } else {
+      const randomId = Math.floor(Math.random() * 1000000);
       const insertLevelProgressQuery = `
         INSERT INTO level_progress 
-          (student_id, syllabus_id, language_id, topic_id, level_id, currQuestion, completed) 
-        VALUES (?, ?, ?, ?, ?, ?, ?)
+          (id, student_id, syllabus_id, language_id, topic_id, level_id, currQuestion, completed) 
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
       `;
-      const [newLevelRow] = await pool.query(insertLevelProgressQuery, [student_id, syllabus_id, language_id, topic_id, parseInt(level), 1, 0]);
+      const [newLevelRow] = await pool.query(insertLevelProgressQuery, [randomId, student_id, syllabus_id, language_id, topic_id, parseInt(level), 1, 0]);
 
-      if(questionNum === 1){
-        console.log('here')
-        const updateLevelStatusQuery = `UPDATE level_progress SET completed = 1 WHERE id = ?`;
-        await pool.query(updateLevelStatusQuery, [newLevelRow.insertId]);
+      if (questionNum === 1) {
+        const updateLevelStatusQuery = `
+          UPDATE level_progress 
+          SET completed = 1 
+          WHERE id = ?
+        `;
+        await pool.query(updateLevelStatusQuery, [randomId]);
       }
 
-      res.status(200).json(newLevelRow);
+      res.status(200).json({ message: 'New level progress created successfully' });
     }
   } catch (err) {
     console.error(err);
@@ -247,9 +276,10 @@ const checkOrUpdateLevelProgress = async (req, res, topic_id, student_id) => {
   }
 };
 
+
 export const getQuestionsNum = async (req, res) => {
   const { syllabus_id, language_id, topic_id, current_Level } = req.params;
-  console.log(syllabus_id, language_id, topic_id, current_Level)
+
   try {
       // Query the database to get the questionsNum
       const query = `
@@ -258,13 +288,10 @@ export const getQuestionsNum = async (req, res) => {
           WHERE syllabus_id = ? AND language_id = ? AND current_Level = ? AND topic_id = ?
       `;
       const [rows] = await pool.query(query, [syllabus_id, language_id, current_Level ,topic_id]);
-
-      if (rows.length === 0) {
-          return res.status(404).json({ error: "No data found" });
-      }
-
-      const questionsNum = rows[0].questionsNum;
+      const questionsNum = rows[0]?.questionsNum || 0;
+      
       return res.status(200).json({ questionsNum });
+      
   } catch (error) {
       console.error("Error retrieving questionsNum:", error);
       return res.status(500).json({ error: "Internal server error" });
@@ -306,9 +333,8 @@ export const getLevelStatus = async (req, res) => {
   try {
     const studentIdQuery = `SELECT id FROM student WHERE user_id = ?`;
   
-    const [student] = await pool.query(studentIdQuery, [student_id]);
+    const [student] = await pool.execute(studentIdQuery, [student_id]);
     const studentId = student[0]?.id;
-
     const topicIdQuery = `SELECT id FROM topic_progress WHERE topicName = ?`;
   
     const [topic] = await pool.query(topicIdQuery, [topic_name]);
@@ -341,7 +367,6 @@ export const getLevelStatus = async (req, res) => {
 
 export const updateTopicProgress = async (req, res) => {
   const { student_id, syllabus_id, language_id, topic_name } = req.body;
-  console.log(student_id, syllabus_id, language_id, topic_name);
   try {
     // Get the topic_id for the given topic_name
     const topicQuery = `
@@ -356,7 +381,6 @@ export const updateTopicProgress = async (req, res) => {
     }
 
     const topic_id = topicResult[0].id;
-    console.log(topic_id);
 
     // Update the completed field in topic_progress table to true
     const updateTopicProgressQuery = `
@@ -379,8 +403,6 @@ export const updateTopicProgress = async (req, res) => {
 
 export const updateLevelProgress = async (req, res, student_id) => {
   const { syllabus_id, language_id, topic_name } = req.body;
-  
-  console.log(student_id, syllabus_id, language_id, topic_name);
   try {
     // Get the current level_id
     const getCurrentLevelQuery = `
@@ -397,7 +419,6 @@ export const updateLevelProgress = async (req, res, student_id) => {
     `;
     const [currentLevelRows] = await pool.query(getCurrentLevelQuery, [student_id, syllabus_id, language_id, topic_name, syllabus_id, language_id]);
     const currentLevel = currentLevelRows[0].max_level_id;
-    console.log(currentLevel);
 
     // Get the levelNum for the topic
     const levelNum = await getLevelNum(req, res);
@@ -406,14 +427,15 @@ export const updateLevelProgress = async (req, res, student_id) => {
       return res.status(200).json({ message: "All levels completed for the topic" });
     } else {
       // Insert a new row with incremented level_id
+      const randomId = Math.floor(Math.random() * 1000000);
       const insertQuery = `
         INSERT INTO level_progress 
-        (student_id, syllabus_id, language_id, topic_id, level_id, currQuestion, completed) 
+        (id, student_id, syllabus_id, language_id, topic_id, level_id, currQuestion, completed) 
         SELECT ?, ?, ?, id, ?, ?, FALSE
         FROM topic_progress
         WHERE topicName = ? AND syllabus_id = ? AND language_id = ?
       `;
-      await pool.query(insertQuery, [student_id, syllabus_id, language_id, currentLevel + 1, 1, topic_name, syllabus_id, language_id]);
+      await pool.query(insertQuery, [randomId,student_id, syllabus_id, language_id, currentLevel + 1, 1, topic_name, syllabus_id, language_id]);
   
       return;
     }
@@ -449,8 +471,6 @@ export const getLevelNum = async (req, res) => {
 
 export const getLevelProgress = async (req, res) =>{
     const {student_id ,syllabus_id,topic_id } = req.params;
-    console.log(student_id);
-
     try{
       const studentIdQuery = `SELECT id FROM student WHERE user_id = ?`;
     
@@ -465,7 +485,7 @@ export const getLevelProgress = async (req, res) =>{
           AND topic_id = ?
       `;
       const [rows] = await pool.query(query, [studentId ,  syllabus_id,topic_id]);
-
+      console.log(rows);
       if (rows.length === 0) {
           return res.status(404).json({ error: "No data found" });
       }
