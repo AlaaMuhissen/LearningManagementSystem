@@ -1,0 +1,44 @@
+{
+  "name": "serverside",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "node --watch server.js",
+    "start": "node server.js",
+    "generate": "prisma generate"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@mysql/xdevapi": "^8.0.35",
+    "@neondatabase/serverless": "^0.7.2",
+    "@planetscale/database": "^1.14.0",
+    "@prisma/adapter-neon": "^5.9.0",
+    "@prisma/adapter-pg": "^5.9.0",
+    "@prisma/adapter-planetscale": "^5.9.0",
+    "@prisma/client": "^5.9.0",
+    "@prisma/extension-accelerate": "^0.6.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.1",
+    "express": "^4.18.2",
+    "firebase": "^10.8.0",
+    "firebase-admin": "^12.0.0",
+    "init": "^0.1.2",
+    "mysql": "^2.18.1",
+    "mysql2": "^3.9.1",
+    "pg": "^8.11.3",
+    "pgshims": "github:neondatabase/serverless",
+    "postgres": "^3.4.3",
+    "prisma": "^5.9.0",
+    "undici": "^6.5.0",
+    "uuid": "^9.0.1",
+    "ws": "^8.16.0"
+  },
+  "devDependencies": {
+    "@types/ws": "^8.5.10"
+  }
+}

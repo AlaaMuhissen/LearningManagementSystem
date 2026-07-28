@@ -1,0 +1,246 @@
+/* =============================================
+   CodeQuest — Game Components
+   Puzzle-themed drag & drop UI
+   ============================================= */
+
+/* ---- CodeBlock ---- */
+.code-block {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px 10px 20px;
+  background: linear-gradient(135deg, #1e2d4e, #162340);
+  border: 1px solid rgba(100,255,218,0.2);
+  border-radius: 10px;
+  cursor: grab;
+  user-select: none;
+  transition: all 0.2s cubic-bezier(0.34,1.56,0.64,1);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.06);
+  min-height: 44px;
+  min-width: 52px;
+  white-space: nowrap;
+  animation: blockIn 0.4s cubic-bezier(0.34,1.56,0.64,1) both;
+}
+
+@keyframes blockIn {
+  from { opacity: 0; transform: scale(0.7) rotate(-4deg); }
+  to   { opacity: 1; transform: scale(1) rotate(0deg); }
+}
+
+.code-block:hover {
+  transform: translateY(-4px) scale(1.04);
+  border-color: rgba(100,255,218,0.5);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.4), 0 0 0 1px rgba(100,255,218,0.2);
+}
+
+.code-block:active { cursor: grabbing; transform: scale(0.96); }
+
+/* Puzzle nubs on code blocks */
+.block-nub {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #64ffda, #4fc3f7);
+  top: 50%;
+  transform: translateY(-50%);
+  box-shadow: 0 0 6px rgba(100,255,218,0.4);
+}
+.block-nub-left  { left: -5px; }
+.block-nub-right { right: -5px; }
+
+/* Code text */
+.block-text {
+  font-family: 'Fira Code', 'Consolas', 'Courier New', monospace;
+  font-size: 13px;
+  font-weight: 600;
+  color: #64ffda;
+  letter-spacing: 0.3px;
+}
+
+/* Grip dots */
+.block-grip {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  opacity: 0.3;
+  flex-shrink: 0;
+}
+.block-grip span {
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: #fff;
+  display: block;
+}
+
+/* ---- Drop Slot ---- */
+.drop-slot {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 60px;
+  min-height: 44px;
+  border-radius: 10px;
+  border: 2px dashed rgba(255,255,255,0.15);
+  background: rgba(255,255,255,0.03);
+  transition: all 0.25s cubic-bezier(0.34,1.56,0.64,1);
+  overflow: visible;
+}
+
+.slot-nub {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255,255,255,0.08);
+  border: 1px dashed rgba(255,255,255,0.15);
+  z-index: 2;
+}
+.slot-nub-left  { left: -5px; }
+.slot-nub-right { right: -5px; }
+
+/* Hover state */
+.slot-hover {
+  border-color: #64ffda;
+  border-style: solid;
+  background: rgba(100,255,218,0.08);
+  transform: scale(1.06);
+  box-shadow: 0 0 20px rgba(100,255,218,0.2);
+}
+.slot-hover .slot-nub {
+  background: #64ffda;
+  border-color: #64ffda;
+  box-shadow: 0 0 6px rgba(100,255,218,0.5);
+}
+
+/* Correct */
+.slot-correct {
+  border-color: #4ade80;
+  border-style: solid;
+  background: rgba(74,222,128,0.08);
+  box-shadow: 0 0 16px rgba(74,222,128,0.25);
+}
+.slot-correct .slot-nub {
+  background: #4ade80;
+  border-color: #4ade80;
+}
+
+/* Wrong */
+.slot-wrong {
+  border-color: #f87171;
+  border-style: solid;
+  background: rgba(248,113,113,0.08);
+  box-shadow: 0 0 16px rgba(248,113,113,0.25);
+  animation: slotShake 0.4s ease;
+}
+
+@keyframes slotShake {
+  0%,100% { transform: translateX(0); }
+  25% { transform: translateX(-6px); }
+  75% { transform: translateX(6px); }
+}
+
+/* Pop on drop */
+.slot-pop { animation: slotPop 0.35s cubic-bezier(0.34,1.56,0.64,1); }
+@keyframes slotPop {
+  0%   { transform: scale(1); }
+  50%  { transform: scale(1.15); }
+  100% { transform: scale(1); }
+}
+
+/* Placeholder */
+.slot-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  padding: 8px;
+}
+
+.slot-number {
+  font-size: 18px;
+  color: rgba(255,255,255,0.15);
+  font-weight: 700;
+}
+
+.slot-drop-hint {
+  font-size: 20px;
+  color: #64ffda;
+  font-weight: 900;
+  animation: pulse 0.5s ease infinite;
+}
+
+@keyframes pulse {
+  0%,100% { transform: scale(1); }
+  50% { transform: scale(1.3); }
+}
+
+/* Sparkles on correct */
+.slot-sparkles {
+  position: absolute;
+  top: -10px;
+  right: -8px;
+  display: flex;
+  gap: 2px;
+  pointer-events: none;
+  animation: sparkleIn 0.4s ease both;
+}
+.slot-sparkles span {
+  font-size: 10px;
+  color: #ffd700;
+  animation: sparkleFloat 1.5s ease-in-out infinite;
+}
+.slot-sparkles span:nth-child(2) { animation-delay: 0.2s; font-size: 8px; }
+.slot-sparkles span:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes sparkleIn {
+  from { opacity: 0; transform: scale(0); }
+  to   { opacity: 1; transform: scale(1); }
+}
+@keyframes sparkleFloat {
+  0%,100% { transform: translateY(0) rotate(0deg); opacity: 1; }
+  50% { transform: translateY(-6px) rotate(20deg); opacity: 0.7; }
+}
+
+/* ---- BlocksDiv panel ---- */
+.blocks-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  height: 100%;
+}
+
+.blocks-title {
+  font-size: 11px;
+  font-weight: 700;
+  color: rgba(255,255,255,0.3);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.blocks-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  overflow-y: auto;
+  max-height: 300px;
+  padding-right: 4px;
+}
+
+.block-item {
+  animation: blockSlideIn 0.4s cubic-bezier(0.34,1.56,0.64,1) both;
+}
+
+@keyframes blockSlideIn {
+  from { opacity: 0; transform: translateX(20px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
