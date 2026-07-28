@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../Login/AuthContext';
 import { useTopics } from '../TopicsContext';
-import '../../styles/levelcard.css';
+import '../../styles/levelcard.css' 
 
 function LevelCard({ syllabusId, language, topic, levelNumber, levelConfig }) {
   const navigate = useNavigate();
