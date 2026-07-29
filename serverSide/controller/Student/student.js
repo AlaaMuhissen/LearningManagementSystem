@@ -32,7 +32,7 @@ export const createNewStudent = async (req, res) => {
     const userId = userRows[0].id;
 
     const { rows: syllabusRows } = await pool.query(
-      `SELECT id FROM syllabus WHERE syllabus_creator = 'main' LIMIT 1`
+      `SELECT id FROM syllabus WHERE syllabus_creator = 'CodeQuest' LIMIT 1`
     );
     if (syllabusRows.length === 0) throw new Error('Default syllabus not found');
 

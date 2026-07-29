@@ -32,17 +32,42 @@ export const AuthProvider = ({ children }) => {
     return () => unsubscribe();
   }, []);
 
-  const fetchUserData = async (email) => {
+  const fetchUserData = async (email, attempt = 0) => {
     try {
       const encodedEmail = encodeURIComponent(email);
-     
       const response = await fetch(`${API_URL}/api/students/getStudent/${encodedEmail}`);
-      if (response.ok) {
-        const data = await response.json();
-        setUserData(data);
-      } else {
-        console.error('Failed to fetch user data');
+
+      if (!response.ok) {
+        console.error('Failed to fetch user data — status', response.status);
+        return;
       }
+
+      // Read as text first — a 200 with an empty body (e.g. the backend did
+      // res.json(undefined) because no row was found yet) would otherwise
+      // throw "Unexpected end of JSON input" on response.json().
+      const text = await response.text();
+      if (!text) {
+        // Right after signup, this endpoint can genuinely be hit before the
+        // student row has finished being inserted (createUserWithEmailAndPassword
+        // fires this listener before SignUpPage's separate addNewStudent call
+        // resolves). Retry a few times with a short delay before giving up.
+        if (attempt < 3) {
+          await new Promise(r => setTimeout(r, 600));
+          return fetchUserData(email, attempt + 1);
+        }
+        console.error('User data not found after retries — the student record may not exist yet.');
+        return;
+      }
+
+      let data;
+      try {
+        data = JSON.parse(text);
+      } catch (parseError) {
+        console.error('Error fetching user data: invalid JSON from server:', text.slice(0, 200));
+        return;
+      }
+
+      setUserData(data);
     } catch (error) {
       console.error('Error fetching user data:', error);
     }
