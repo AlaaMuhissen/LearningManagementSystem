@@ -1,1 +1,4 @@
 firebase-debug.log
+/clientSide/node_modules    
+/clientSide/dist
+/clientSide/.env
