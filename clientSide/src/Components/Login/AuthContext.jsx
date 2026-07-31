@@ -25,37 +25,41 @@ export const AuthProvider = ({ children }) => {
         window.localStorage.setItem('auth', 'true');
         const token = await userCred.getIdToken();
         setAuthToken(token);
-        await fetchUserData(userCred.email);
+        await fetchUserData(userCred.email, token);
       }
       setLoading(false);
     });
     return () => unsubscribe();
   }, []);
 
-  const fetchUserData = async (email, attempt = 0) => {
+  const fetchUserData = async (email, token, attempt = 0) => {
     try {
       const encodedEmail = encodeURIComponent(email);
-      const response = await fetch(`${API_URL}/api/students/getStudent/${encodedEmail}`);
+      const response = await fetch(`${API_URL}/api/students/getStudent/${encodedEmail}`, {
+        headers: token ? { Authorization: `Bearer ${token}` } : undefined,
+      });
+
+      if (response.status === 404) {
+        // Genuinely not found — retrying won't help here, this is a real
+        // "no such student" case now that the backend returns a proper 404
+        // instead of an empty 200. (Signup race conditions still land here
+        // briefly right after account creation, hence the retry below.)
+        if (attempt < 3) {
+          await new Promise(r => setTimeout(r, 600));
+          return fetchUserData(email, token, attempt + 1);
+        }
+        console.error('User data not found after retries — the student record may not exist yet.');
+        return;
+      }
 
       if (!response.ok) {
         console.error('Failed to fetch user data — status', response.status);
         return;
       }
 
-      // Read as text first — a 200 with an empty body (e.g. the backend did
-      // res.json(undefined) because no row was found yet) would otherwise
-      // throw "Unexpected end of JSON input" on response.json().
       const text = await response.text();
       if (!text) {
-        // Right after signup, this endpoint can genuinely be hit before the
-        // student row has finished being inserted (createUserWithEmailAndPassword
-        // fires this listener before SignUpPage's separate addNewStudent call
-        // resolves). Retry a few times with a short delay before giving up.
-        if (attempt < 3) {
-          await new Promise(r => setTimeout(r, 600));
-          return fetchUserData(email, attempt + 1);
-        }
-        console.error('User data not found after retries — the student record may not exist yet.');
+        console.error('Empty response body from getStudent despite a 200 status.');
         return;
       }
 
@@ -87,7 +91,10 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, updateUser, userData, loading, authToken, logout }}>
+    <AuthContext.Provider value={{
+      user, updateUser, userData, loading, authToken, logout,
+      refreshUserData: () => userData?.email && fetchUserData(userData.email, authToken),
+    }}>
       {children}
     </AuthContext.Provider>
   );

@@ -1,4 +1,4 @@
 id,topic_id,lanName,question_text,reward,level,syllabus_id
-1,1,html,"Create a line of HTML code to define the main heading of a webpage",5,1,1
+1,1,html,"Create a line of HTML code to define the main heading of a pngage",5,1,1
 2,1,html,"Create a paragraph using the correct HTML tags",5,1,1
 3,1,html," Create an HTML list with three items",5,1,1

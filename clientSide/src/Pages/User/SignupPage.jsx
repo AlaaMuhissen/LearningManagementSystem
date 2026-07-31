@@ -5,10 +5,17 @@ import { useNavigate, Link } from 'react-router-dom';
 import API_URL from '../../config/api.js';
 import LoginWithGmail from '../../Components/Login/LoginWithGmail';
 import LoginWithFacebook from '../../Components/Login/LoginWithFacebook';
+import BoyAvatar from '/boy.png';
+import GirlAvatar from '/girl.png';
 import '../../styles/login.css';
 
+const AVATAR_OPTIONS = [
+  { id: 'boy', label: 'Boy', src: BoyAvatar },
+  { id: 'girl', label: 'Girl', src: GirlAvatar },
+];
+
 function SignUpPage() {
-  const [form, setForm] = useState({ username: '', email: '', password: '', confirm: '', phone: '', address: '' });
+  const [form, setForm] = useState({ username: '', email: '', password: '', confirm: '', phone: '', address: '', avatar: 'boy' });
   const [step, setStep] = useState(1); // 2-step form
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -65,7 +72,7 @@ function SignUpPage() {
       // Create Firebase user
       await createUserWithEmailAndPassword(auth, form.email, form.password);
       // Create user in DB
-      await fetch(`${API_URL}/api/students/addNewStudent`, {
+      const res = await fetch(`${API_URL}/api/students/addNewStudent`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -77,6 +84,17 @@ function SignUpPage() {
           role: 'student',
         }),
       });
+
+      // Save the chosen avatar locally, keyed by the new user's DB id — same
+      // key UserProfile.jsx reads from (avatar_pref_<userId>), since there's
+      // no DB column for this yet.
+      if (res.ok) {
+        const data = await res.json().catch(() => null);
+        if (data?.id) {
+          window.localStorage.setItem(`avatar_pref_${data.id}`, form.avatar);
+        }
+      }
+
       navigate('/dashboard');
     } catch (error) {
       if (error.code === 'auth/email-already-in-use') {
@@ -160,6 +178,37 @@ function SignUpPage() {
         {step === 2 && (
           <form onSubmit={handleSignUp} style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
             <p className="step-hint">Optional — you can skip these anytime</p>
+
+            {/* Avatar picker */}
+            <div className="field-group">
+              <label className="field-label">Choose your avatar</label>
+              <div style={{ display: 'flex', gap: 12, marginTop: 4 }}>
+                {AVATAR_OPTIONS.map(opt => (
+                  <div
+                    key={opt.id}
+                    onClick={() => update('avatar', opt.id)}
+                    style={{
+                      display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4,
+                      cursor: 'pointer', padding: 10, borderRadius: 12,
+                      border: `1px solid ${form.avatar === opt.id ? '#64ffda' : 'rgba(255,255,255,0.12)'}`,
+                      background: form.avatar === opt.id ? 'rgba(100,255,218,0.08)' : 'rgba(255,255,255,0.02)',
+                      transition: 'all 0.15s',
+                    }}
+                  >
+                    <div style={{
+                      width: 48, height: 48, borderRadius: '50%', overflow: 'hidden',
+                      background: '#0d1228', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    }}>
+                      <img src={opt.src} alt={opt.label} style={{ width: '72%', height: '72%', objectFit: 'contain' }} />
+                    </div>
+                    <span style={{ fontSize: 12, color: form.avatar === opt.id ? '#64ffda' : 'rgba(255,255,255,0.5)' }}>
+                      {opt.label}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
             <div className="field-group">
               <label className="field-label">Phone (optional)</label>
               <div className="field-wrap">

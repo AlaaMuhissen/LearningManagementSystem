@@ -14,6 +14,13 @@ export const getStudentByEmail = async (req, res) => {
   const { email } = req.params;
   try {
     const { rows } = await pool.query(`SELECT * FROM users WHERE email = $1`, [email]);
+    if (rows.length === 0) {
+      // Previously this fell through to res.json(undefined), which sends a
+      // 200 with an EMPTY body — that's what was causing "Unexpected end of
+      // JSON input" crashes on the frontend. A real 404 lets the frontend
+      // distinguish "not found" from "found" cleanly via response.ok.
+      return res.status(404).json({ error: 'Student not found' });
+    }
     res.json(rows[0]);
   } catch (error) {
     console.error('Error fetching student:', error);
