@@ -17,11 +17,16 @@ CodeQuest is a full-stack learning management system built for young coders (age
 
 ---
 
-<!--
-  📸 Add a few screenshots or a short GIF here — the dashboard, a student
-  solving a drag-and-drop challenge, the AI chat, and the teacher analytics
-  view all make great first impressions.
--->
+<table>
+    <tr>
+      <td><img src="clientSide/public/screenshots/login.png" width="500"/></td>
+      <td><img src="clientSide/public/screenshots/student_dashboard.png" width="500"/></td>
+    </tr>
+    <tr>
+      <td><img src="clientSide/public/screenshots/teacher_dashboard.png" width="600"/></td>
+      <td><img src="clientSide/public/screenshots/phone.png" width="400"/></td>
+    </tr>
+  </table>
 
 ## 📖 Table of Contents
 
